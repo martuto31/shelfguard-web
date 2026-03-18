@@ -1,0 +1,16 @@
+@defer (when showLayout) {
+    <div [class]="['app-container', dimensionService.screenType]">
+        <app-navigation></app-navigation>
+
+        <main class="main-content">
+            <router-outlet></router-outlet>
+        </main>
+
+        <app-footer></app-footer>
+    </div>
+} @placeholder {
+    <div class="loading-screen">
+        <span>ShelfGuard</span>
+        <div class="loading-spinner"></div>
+    </div>
+}

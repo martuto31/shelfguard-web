@@ -1,0 +1,34 @@
+:root {
+    /* Background Colors */
+    --bg-primary: #f8fafc;
+    --bg-secondary: #f1f5f9;
+    --bg-white: #ffffff;
+    --bg-gray: #f9fafb;
+
+    /* Brand Colors */
+    --primary-brand: #2563eb;
+    --primary-brand-hover: #1d4ed8;
+    --secondary-brand: #004aad;
+
+    /* Button Colors */
+    --cta-button: #2563eb;
+    --cta-button-hover: #1d4ed8;
+
+    /* Text Colors */
+    --font-white: #ffffff;
+    --font-high-emphasis: #1e293b;
+    --font-medium-emphasis: #64748b;
+    --font-low-emphasis: #94a3b8;
+
+    /* Border Colors */
+    --border-white: #e2e8f0;
+    --border-black: rgb(186, 194, 206);
+
+    /* Status Colors */
+    --color-red: #ef4444;
+    --color-yellow: #f59e0b;
+    --color-green: #22c55e;
+
+    /* Error */
+    --error-color: #d32f2f;
+}

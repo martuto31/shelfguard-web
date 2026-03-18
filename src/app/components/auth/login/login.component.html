@@ -1,0 +1,31 @@
+<div class="login-container">
+    <div class="login-card">
+        <h2>Login</h2>
+        <p class="subtitle">Sign in to ShelfGuard</p>
+
+        <form [formGroup]="formGroup" (ngSubmit)="login()">
+            <div class="form-field">
+                <label for="email">Email</label>
+                <input id="email" type="email" formControlName="email" placeholder="you@example.com">
+                @if (hasError('email', 'required')) {
+                    <span class="error">Email is required</span>
+                }
+                @if (hasError('email', 'pattern')) {
+                    <span class="error">Invalid email format</span>
+                }
+            </div>
+
+            <div class="form-field">
+                <label for="password">Password</label>
+                <input id="password" type="password" formControlName="password" placeholder="Your password">
+                @if (hasError('password', 'required')) {
+                    <span class="error">Password is required</span>
+                }
+            </div>
+
+            <button type="submit" class="btn btn-primary login-btn" [disabled]="isLoading">
+                {{ isLoading ? 'Signing in...' : 'Sign in' }}
+            </button>
+        </form>
+    </div>
+</div>

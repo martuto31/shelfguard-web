@@ -1,0 +1,46 @@
+html,
+body {
+    width: 100%;
+    min-height: 100vh;
+    font-family: "Inter", system-ui, sans-serif;
+    line-height: 1.5;
+    background-color: var(--bg-primary);
+    color: var(--font-high-emphasis);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+::selection {
+    background-color: rgba(37, 99, 235, 0.3);
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+input:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary-brand);
+    outline-offset: 2px;
+}

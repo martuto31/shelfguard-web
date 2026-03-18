@@ -1,0 +1,17 @@
+.snackbar-success .mdc-snackbar__surface {
+    background-color: var(--color-green) !important;
+}
+
+.snackbar-error .mdc-snackbar__surface {
+    background-color: var(--color-red) !important;
+}
+
+.snackbar-success .mdc-snackbar__label,
+.snackbar-error .mdc-snackbar__label {
+    color: var(--font-white) !important;
+}
+
+.snackbar-success .mat-mdc-snack-bar-action,
+.snackbar-error .mat-mdc-snack-bar-action {
+    color: var(--font-white) !important;
+}

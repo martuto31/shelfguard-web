@@ -1,0 +1,24 @@
+<nav class="navbar">
+    <a routerLink="/" class="logo">ShelfGuard</a>
+
+    @if (userService.user()) {
+        <div class="nav-links">
+            <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+            <a routerLink="/products" routerLinkActive="active">Products</a>
+            <a routerLink="/batches" routerLinkActive="active">Batches</a>
+            <a routerLink="/pick" routerLinkActive="active">Pick</a>
+
+            @if (userService.user()!.role === Role.OWNER || userService.user()!.role === Role.MANAGER) {
+                <a routerLink="/analytics" routerLinkActive="active">Analytics</a>
+            }
+
+            @if (userService.user()!.role === Role.OWNER) {
+                <a routerLink="/users" routerLinkActive="active">Users</a>
+            }
+        </div>
+
+        <button class="btn btn-secondary small-btn" (click)="logout()">Logout</button>
+    } @else {
+        <a routerLink="/login" class="btn btn-primary small-btn">Login</a>
+    }
+</nav>

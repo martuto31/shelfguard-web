@@ -1,0 +1,39 @@
+.btn {
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 12px 24px;
+}
+
+.small-btn {
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 8px 16px;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+.btn-primary {
+    color: var(--font-white);
+    background-color: var(--cta-button);
+}
+
+.btn-primary:hover {
+    background-color: var(--cta-button-hover);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    color: var(--cta-button);
+    background: none;
+    border: 1px solid var(--cta-button);
+}

@@ -1,6 +1,4 @@
-import { Injectable } from '@angular/core';
-
-import { Subject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 
 enum ScreenType {
   Desktop = 'desktop',
@@ -15,32 +13,29 @@ enum ScreenType {
 export class DimensionService {
 
   constructor() {
-    this.screenType = this.getScreenType();
-    this.isMobile = this.screenType === ScreenType.Mobile;
-    this.isTablet = this.screenType === ScreenType.Tablet;
-    this.isDesktop = this.screenType === ScreenType.Desktop;
+    this.screenType.set(this.getScreenType());
+    this.isMobile.set(this.screenType() === ScreenType.Mobile);
+    this.isTablet.set(this.screenType() === ScreenType.Tablet);
+    this.isDesktop.set(this.screenType() === ScreenType.Desktop);
 
     this.subscribeToWindowResize();
   }
 
-  public windowResize = new Subject<void>();
-
-  public screenType: ScreenType;
-  public isMobile: boolean;
-  public isTablet: boolean;
-  public isDesktop: boolean
+  public screenType = signal<ScreenType>(ScreenType.Desktop);
+  public isMobile = signal(false);
+  public isTablet = signal(false);
+  public isDesktop = signal(true);
 
   private tabletBreakpoint = 960;
   private mobileBreakpoint = 480;
 
   private subscribeToWindowResize(): void {
     window.onresize = () => {
-      this.windowResize.next();
-      this.screenType = this.getScreenType();
+      this.screenType.set(this.getScreenType());
 
-      this.isMobile = this.screenType === ScreenType.Mobile;
-      this.isTablet = this.screenType === ScreenType.Tablet;
-      this.isDesktop = this.screenType === ScreenType.Desktop;
+      this.isMobile.set(this.screenType() === ScreenType.Mobile);
+      this.isTablet.set(this.screenType() === ScreenType.Tablet);
+      this.isDesktop.set(this.screenType() === ScreenType.Desktop);
     };
   }
 

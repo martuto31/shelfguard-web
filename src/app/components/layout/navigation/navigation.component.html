@@ -3,22 +3,23 @@
 
     @if (userService.user()) {
         <div class="nav-links">
-            <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-            <a routerLink="/products" routerLinkActive="active">Products</a>
-            <a routerLink="/batches" routerLinkActive="active">Batches</a>
-            <a routerLink="/pick" routerLinkActive="active">Pick</a>
+            <a routerLink="/dashboard" routerLinkActive="active">Табло</a>
+            <a routerLink="/products" routerLinkActive="active">Продукти</a>
+            <a routerLink="/suppliers" routerLinkActive="active">Доставчици</a>
+            <a routerLink="/batches" routerLinkActive="active">Партиди</a>
+            <a routerLink="/pick" routerLinkActive="active">Пикиране</a>
 
             @if (userService.user()!.role === Role.OWNER || userService.user()!.role === Role.MANAGER) {
-                <a routerLink="/analytics" routerLinkActive="active">Analytics</a>
+                <a routerLink="/analytics" routerLinkActive="active">Анализи</a>
             }
 
             @if (userService.user()!.role === Role.OWNER) {
-                <a routerLink="/users" routerLinkActive="active">Users</a>
+                <a routerLink="/users" routerLinkActive="active">Потребители</a>
             }
         </div>
 
-        <button class="btn btn-secondary small-btn" (click)="logout()">Logout</button>
+        <button class="btn btn-secondary small-btn" (click)="logout()">Изход</button>
     } @else {
-        <a routerLink="/login" class="btn btn-primary small-btn">Login</a>
+        <a routerLink="/login" class="btn btn-primary small-btn">Вход</a>
     }
 </nav>

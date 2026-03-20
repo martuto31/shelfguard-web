@@ -1,5 +1,5 @@
-@defer (when showLayout) {
-    <div [class]="['app-container', dimensionService.screenType]">
+@defer (when showLayout()) {
+    <div [class]="['app-container', dimensionService.screenType()]">
         <app-navigation></app-navigation>
 
         <main class="main-content">

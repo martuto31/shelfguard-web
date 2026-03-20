@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { FooterComponent } from './footer/footer.component';
@@ -10,7 +10,7 @@ import { DimensionService } from './../../services/dimension.service';
 @Component({
     selector: 'app-layout',
     templateUrl: './layout.component.html',
-    styleUrls: ['./layout.component.css'],
+    styleUrl: './layout.component.css',
     imports: [
         RouterOutlet,
         FooterComponent,
@@ -27,14 +27,14 @@ export class LayoutComponent {
       this.init();
     }
 
-    public showLayout = false;
+    public showLayout = signal(false);
 
     private async init(): Promise<void> {
       if (this.userService.isUserLogged()) {
         await this.userService.setUserFromDatabase();
       }
 
-      this.showLayout = true;
+      this.showLayout.set(true);
     }
 
 }

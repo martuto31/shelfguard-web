@@ -31,7 +31,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
 
-          snackbarService.error('Session expired. Please log in again.');
+          snackbarService.error('Сесията изтече. Моля, влезте отново.');
 
           router.navigate(['/login']);
         }

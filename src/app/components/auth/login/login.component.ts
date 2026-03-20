@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -16,7 +16,7 @@ interface FormControls {
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css'],
+    styleUrl: './login.component.css',
     imports: [
         ReactiveFormsModule,
     ]
@@ -35,7 +35,7 @@ export class LoginComponent {
   }
 
   public formGroup!: FormGroup<FormControls>;
-  public isLoading = false;
+  public isLoading = signal(false);
 
   public async login(): Promise<void> {
     if (this.formGroup.invalid) {
@@ -44,7 +44,7 @@ export class LoginComponent {
       return;
     }
 
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     const body = {
       email: this.formGroup.controls.email.value!,
@@ -60,13 +60,13 @@ export class LoginComponent {
         this.router.navigate([ '/dashboard' ]);
         break;
       case 401:
-        this.snackbarService.error('Invalid email or password.');
+        this.snackbarService.error('Невалиден имейл или парола.');
         break;
       default:
-        this.snackbarService.error('Something went wrong. Please try again.');
+        this.snackbarService.error('Нещо се обърка. Опитайте отново.');
     }
 
-    this.isLoading = false;
+    this.isLoading.set(false);
   }
 
   public hasError(controlName: string, errorName: string) {

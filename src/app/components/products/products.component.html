@@ -1,0 +1,103 @@
+<div class="page-header">
+    <h2>Продукти</h2>
+
+    <button class="btn btn-primary small-btn" (click)="openForm()">+ Добави продукт</button>
+</div>
+
+@if (showForm()) {
+    <div class="form-card">
+        <h3>{{ editingId() ? 'Редактиране на продукт' : 'Нов продукт' }}</h3>
+
+        <form [formGroup]="formGroup" (ngSubmit)="save()">
+            <div class="form-row">
+                <div class="form-field">
+                    <label>Име</label>
+
+                    <input type="text" formControlName="name" placeholder="Име на продукт">
+
+                    @if (hasError('name', 'required')) {
+                        <span class="error">Задължително</span>
+                    }
+                </div>
+
+                <div class="form-field">
+                    <label>SKU</label>
+
+                    <input type="text" formControlName="sku" placeholder="напр. OOL-500">
+
+                    @if (hasError('sku', 'required')) {
+                        <span class="error">Задължително</span>
+                    }
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-field">
+                    <label>Категория</label>
+
+                    <input type="text" formControlName="category" placeholder="напр. Масла, Млечни">
+                </div>
+
+                <div class="form-field">
+                    <label>Мерна единица</label>
+
+                    <select formControlName="unit">
+                        <option value="pcs">Бройки</option>
+                        <option value="kg">Килограми</option>
+                        <option value="L">Литри</option>
+                        <option value="box">Кутии</option>
+                    </select>
+                </div>
+
+                <div class="form-field">
+                    <label>Мин. наличност</label>
+
+                    <input type="number" formControlName="minStockThreshold" min="0">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary small-btn" (click)="closeForm()">Отказ</button>
+
+                <button type="submit" class="btn btn-primary small-btn" [disabled]="isLoading()">
+                    {{ isLoading() ? 'Запазване...' : 'Запази' }}
+                </button>
+            </div>
+        </form>
+    </div>
+}
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Име</th>
+                <th>SKU</th>
+                <th>Категория</th>
+                <th>Мерна ед.</th>
+                <th>Мин. наличност</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (product of products(); track product.id) {
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.sku }}</td>
+                    <td>{{ product.category || '—' }}</td>
+                    <td>{{ product.unit }}</td>
+                    <td>{{ product.minStockThreshold }}</td>
+                    <td class="actions">
+                        <button class="action-btn" (click)="openForm(product)">Редактирай</button>
+                        <button class="action-btn delete" (click)="deleteProduct(product.id)">Изтрий</button>
+                    </td>
+                </tr>
+            } @empty {
+                <tr>
+                    <td colspan="6" class="empty">Няма продукти. Добавете първия продукт отгоре.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,70 @@
+<h2>FEFO Пикиране</h2>
+
+<div class="pick-form">
+    <div class="form-row">
+        <div class="form-field">
+            <label>Продукт</label>
+
+            <select [value]="selectedProductId()" (change)="onProductChange($event)">
+                <option value="">Изберете продукт</option>
+                @for (product of products(); track product.id) {
+                    <option [value]="product.id">{{ product.name }} ({{ product.sku }})</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label>Необходимо количество</label>
+
+            <input type="number" [value]="quantity()" (input)="onQuantityChange($event)" min="1" placeholder="Въведете количество">
+        </div>
+
+        <div class="form-field btn-field">
+            <button class="btn btn-primary" (click)="suggest()" [disabled]="isLoading()">
+                {{ isLoading() ? 'Зареждане...' : 'Предложи пикиране' }}
+            </button>
+        </div>
+    </div>
+</div>
+
+@if (showSuggestions()) {
+    <div class="suggestions-card">
+        <h3>Предложение за пикиране на {{ getProductName() }}</h3>
+
+        @if (totalQuantity() < quantity()!) {
+            <div class="warning">
+                Налични са само {{ totalQuantity() }} от поисканите {{ quantity() }}.
+            </div>
+        }
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Партида</th>
+                    <th>Срок на годност</th>
+                    <th>Кол. за пикиране</th>
+                    <th>Остатък след</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @for (s of suggestions(); track s.batchId) {
+                    <tr>
+                        <td>{{ s.batchNumber }}</td>
+                        <td>{{ s.expiryDate | date:'dd MMM yyyy' }}</td>
+                        <td class="pick-qty">{{ s.quantityToPick }}</td>
+                        <td>{{ s.quantityRemainingAfter }}</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="confirm-actions">
+            <button class="btn btn-secondary" (click)="reset()">Отказ</button>
+
+            <button class="btn btn-primary" (click)="confirmPick()" [disabled]="isLoading()">
+                {{ isLoading() ? 'Потвърждаване...' : 'Потвърди пикиране' }}
+            </button>
+        </div>
+    </div>
+}

@@ -6,7 +6,7 @@ import { UserService } from './../../services/user.service';
 import { Role } from './../../models/user.model';
 
 export const authGuard = (...roles: Role[]) => {
-  return async() => {
+  return async () => {
     const router = inject(Router);
     const userService = inject(UserService);
 

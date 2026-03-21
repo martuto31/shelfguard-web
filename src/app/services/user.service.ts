@@ -29,7 +29,7 @@ export class UserService {
   }
 
   public isUserLogged(): boolean {
-    const token = localStorage.getItem('accessToken')
+    const token = localStorage.getItem('accessToken');
 
     return !!token;
   }

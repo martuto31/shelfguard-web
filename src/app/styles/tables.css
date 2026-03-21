@@ -1,0 +1,63 @@
+/* layout → spacing → sizing → visual → typography → effects */
+
+.table-container {
+    overflow: hidden;
+    background: var(--bg-white);
+    border: 1px solid var(--border-white);
+    border-radius: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--font-medium-emphasis);
+    border-bottom: 1px solid var(--border-white);
+}
+
+td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border-white);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+.empty {
+    padding: 32px 16px;
+    color: var(--font-medium-emphasis);
+    text-align: center;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    padding: 4px 12px;
+    background: none;
+    border-radius: 6px;
+    color: var(--primary-brand);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.action-btn:hover {
+    background: var(--bg-gray);
+}
+
+.action-btn.delete {
+    color: var(--error-color);
+}

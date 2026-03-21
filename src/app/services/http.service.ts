@@ -1,5 +1,5 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { catchError, map, Observable, of } from 'rxjs';
 
@@ -7,6 +7,7 @@ export interface ApiResponse<T> {
   data?: T;
   status: number;
   error?: string;
+  networkError?: boolean;
 }
 
 interface HttpOptions {
@@ -92,10 +93,15 @@ export class HttpService {
   }
 
   private onError<Response>(error: HttpErrorResponse): Observable<ApiResponse<Response>> {
+    const message = typeof error.error === 'string'
+      ? error.error
+      : error.error?.message ?? '';
+
     const apiResponse: ApiResponse<Response> = {
       data: { } as Response,
       status: error.status,
-      error: error.error ? error.error.message : '',
+      error: message,
+      networkError: error.status === 0,
     };
 
     return of(apiResponse);

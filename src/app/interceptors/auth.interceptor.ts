@@ -1,6 +1,7 @@
-import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+
 import { catchError, throwError } from 'rxjs';
 
 import { SnackbarService } from '../services/snackbar.service';
@@ -24,7 +25,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
 
   return next(req.clone({ setHeaders: headers })).pipe(
     catchError((error) => {
-      if (error.status === 401) {
+      if (error.status === 401 || error.status === 498) {
         const isLoginRequest = req.url.includes('auth/login');
 
         if (!isLoginRequest) {

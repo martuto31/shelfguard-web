@@ -2,5 +2,7 @@
 @import './app/styles/global.css';
 @import './app/styles/headings.css';
 @import './app/styles/buttons.css';
+@import './app/styles/forms.css';
+@import './app/styles/tables.css';
 @import './app/styles/variables.css';
 @import './app/styles/custom-material.css';

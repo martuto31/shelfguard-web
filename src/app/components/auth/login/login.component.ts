@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { lastValueFrom } from 'rxjs';
@@ -60,7 +60,11 @@ export class LoginComponent {
         this.router.navigate([ '/dashboard' ]);
         break;
       case 401:
+      case 404:
         this.snackbarService.error('Невалиден имейл или парола.');
+        break;
+      case 403:
+        this.snackbarService.error('Акаунтът е деактивиран.');
         break;
       default:
         this.snackbarService.error('Нещо се обърка. Опитайте отново.');

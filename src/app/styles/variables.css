@@ -29,6 +29,16 @@
     --color-yellow: #f59e0b;
     --color-green: #22c55e;
 
+    /* Status Badges */
+    --status-good-bg: #dcfce7;
+    --status-good-text: #166534;
+    --status-warning-bg: #fef3c7;
+    --status-warning-text: #92400e;
+    --status-critical-bg: #fee2e2;
+    --status-critical-text: #991b1b;
+    --status-muted-bg: #f3f4f6;
+    --status-muted-text: #6b7280;
+
     /* Error */
     --error-color: #d32f2f;
 }

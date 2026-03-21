@@ -1,0 +1,45 @@
+/* layout → spacing → sizing → visual → typography → effects */
+
+.filter-row {
+    padding: 16px 24px;
+    margin-bottom: 16px;
+    max-width: 320px;
+    background: var(--bg-white);
+    border: 1px solid var(--border-white);
+    border-radius: 12px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.good {
+    background: var(--status-good-bg);
+    color: var(--status-good-text);
+}
+
+.status-badge.warning {
+    background: var(--status-warning-bg);
+    color: var(--status-warning-text);
+}
+
+.status-badge.critical {
+    background: var(--status-critical-bg);
+    color: var(--status-critical-text);
+}
+
+.status-badge.expired {
+    background: var(--status-muted-bg);
+    color: var(--status-muted-text);
+    text-decoration: line-through;
+}
+
+.status-badge.depleted {
+    background: var(--status-muted-bg);
+    color: #9ca3af;
+}

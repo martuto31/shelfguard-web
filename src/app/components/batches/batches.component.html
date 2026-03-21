@@ -1,0 +1,146 @@
+<div class="page-header">
+    <h2>Партиди</h2>
+
+    <button class="btn btn-primary small-btn" (click)="openForm()">+ Приемане на стока</button>
+</div>
+
+@if (showForm()) {
+    <div class="form-card">
+        <h3>Приемане на нова партида</h3>
+
+        <form [formGroup]="formGroup" (ngSubmit)="save()">
+            <div class="form-row">
+                <div class="form-field">
+                    <label>Продукт</label>
+
+                    <select formControlName="productId">
+                        <option value="">Изберете продукт</option>
+                        @for (product of products(); track product.id) {
+                            <option [value]="product.id">{{ product.name }} ({{ product.sku }})</option>
+                        }
+                    </select>
+
+                    @if (hasError('productId', 'required')) {
+                        <span class="error">Задължително</span>
+                    }
+                </div>
+
+                <div class="form-field">
+                    <label>Номер на партида</label>
+
+                    <input type="text" formControlName="batchNumber" placeholder="напр. LOT-2026-001">
+
+                    @if (hasError('batchNumber', 'required')) {
+                        <span class="error">Задължително</span>
+                    }
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-field">
+                    <label>Количество</label>
+
+                    <input type="number" formControlName="quantity" min="1" placeholder="Въведете количество">
+
+                    @if (hasError('quantity', 'required')) {
+                        <span class="error">Задължително</span>
+                    }
+                </div>
+
+                <div class="form-field">
+                    <label>Срок на годност</label>
+
+                    <input type="date" formControlName="expiryDate">
+
+                    @if (hasError('expiryDate', 'required')) {
+                        <span class="error">Задължително</span>
+                    }
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-field">
+                    <label>Доставчик</label>
+
+                    <select formControlName="supplierId">
+                        <option value="">Без доставчик</option>
+                        @for (supplier of suppliers(); track supplier.id) {
+                            <option [value]="supplier.id">{{ supplier.name }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-field">
+                    <label>Бележки</label>
+
+                    <input type="text" formControlName="notes" placeholder="Допълнителни бележки">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary small-btn" (click)="closeForm()">Отказ</button>
+
+                <button type="submit" class="btn btn-primary small-btn" [disabled]="isLoading()">
+                    {{ isLoading() ? 'Приемане...' : 'Приеми партида' }}
+                </button>
+            </div>
+        </form>
+    </div>
+}
+
+<div class="filter-row">
+    <div class="form-field">
+        <label>Филтър по продукт</label>
+
+        <select [value]="selectedProductId()" (change)="onProductChange($event)">
+            <option value="">Всички продукти</option>
+            @for (product of products(); track product.id) {
+                <option [value]="product.id">{{ product.name }} ({{ product.sku }})</option>
+            }
+        </select>
+    </div>
+</div>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Продукт</th>
+                <th>Партида</th>
+                <th>Получено кол.</th>
+                <th>Остатък</th>
+                <th>Срок на годност</th>
+                <th>Доставчик</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (batch of batches(); track batch.id) {
+                <tr>
+                    <td>{{ getProductName(batch) }}</td>
+                    <td>{{ batch.batchNumber }}</td>
+                    <td>{{ batch.quantityReceived }}</td>
+                    <td>{{ batch.quantityRemaining }}</td>
+                    <td>{{ batch.expiryDate | date:'dd MMM yyyy' }}</td>
+                    <td>{{ getSupplierName(batch) }}</td>
+                    <td>
+                        <span class="status-badge" [class]="getBatchStatusClass(batch)">
+                            {{ getBatchStatusLabel(batch) }}
+                        </span>
+                    </td>
+                </tr>
+            } @empty {
+                <tr>
+                    <td colspan="7" class="empty">
+                        @if (selectedProductId()) {
+                            Няма партиди за този продукт.
+                        } @else {
+                            Изберете продукт, за да видите партидите.
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

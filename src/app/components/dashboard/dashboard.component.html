@@ -1,0 +1,48 @@
+<h2>Табло</h2>
+
+@if (isLoading()) {
+    <p class="loading">Зареждане...</p>
+} @else if (groups().length === 0) {
+    <div class="empty-state">
+        <p>Няма партиди с изтичащ срок в следващите 90 дни.</p>
+    </div>
+} @else {
+    @for (group of groups(); track group.label) {
+        <div class="expiry-group">
+            <div class="group-header" [class]="group.cssClass">
+                <h3>{{ group.label }}</h3>
+
+                <span class="count">{{ group.batches.length }} партид{{ group.batches.length === 1 ? 'а' : 'и' }}</span>
+            </div>
+
+            <div class="batch-cards">
+                @for (batch of group.batches; track batch.id) {
+                    <div class="batch-card" [class]="group.cssClass">
+                        <div class="card-header">
+                            <span class="product-name">{{ getProductName(batch) }}</span>
+
+                            <span class="days-badge" [class]="group.cssClass">{{ getDaysUntilExpiry(batch) }}д</span>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="card-row">
+                                <span class="label">Партида</span>
+                                <span>{{ batch.batchNumber }}</span>
+                            </div>
+
+                            <div class="card-row">
+                                <span class="label">Изтича</span>
+                                <span>{{ batch.expiryDate | date:'dd MMM yyyy' }}</span>
+                            </div>
+
+                            <div class="card-row">
+                                <span class="label">Остатък</span>
+                                <span class="qty">{{ batch.quantityRemaining }}</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+}

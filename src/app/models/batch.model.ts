@@ -28,9 +28,11 @@ export interface PickSuggestion {
     expiryDate: string;
     quantityToPick: number;
     quantityRemainingAfter: number;
+    daysUntilExpiry: number;
 }
 
 export interface PickResult {
     suggestions: PickSuggestion[];
     totalQuantity: number;
+    expiredCount: number;
 }

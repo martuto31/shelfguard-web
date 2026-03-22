@@ -5,6 +5,7 @@ export interface Product {
     category: string;
     unit: string;
     minStockThreshold: number;
+    minShelfLifeDays: number;
 }
 
 export interface CreateProductBody {
@@ -13,4 +14,5 @@ export interface CreateProductBody {
     category?: string;
     unit?: string;
     minStockThreshold?: number;
+    minShelfLifeDays?: number;
 }

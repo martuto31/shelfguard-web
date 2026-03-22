@@ -31,6 +31,12 @@
     <div class="suggestions-card">
         <h3>Предложение за пикиране на {{ getProductName() }}</h3>
 
+        @if (expiredCount() > 0) {
+            <div class="warning expired-warning">
+                {{ expiredCount() }} партиди с изтекъл срок за този продукт. Необходимо е бракуване.
+            </div>
+        }
+
         @if (totalQuantity() < quantity()!) {
             <div class="warning">
                 Налични са само {{ totalQuantity() }} от поисканите {{ quantity() }}.
@@ -42,6 +48,7 @@
                 <tr>
                     <th>Партида</th>
                     <th>Срок на годност</th>
+                    <th>Оставащи дни</th>
                     <th>Кол. за пикиране</th>
                     <th>Остатък след</th>
                 </tr>
@@ -52,6 +59,7 @@
                     <tr>
                         <td>{{ s.batchNumber }}</td>
                         <td>{{ s.expiryDate | date:'dd MMM yyyy' }}</td>
+                        <td [class]="getDaysClass(s.daysUntilExpiry)">{{ s.daysUntilExpiry }} дни</td>
                         <td class="pick-qty">{{ s.quantityToPick }}</td>
                         <td>{{ s.quantityRemainingAfter }}</td>
                     </tr>

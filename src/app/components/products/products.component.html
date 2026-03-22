@@ -54,6 +54,12 @@
 
                     <input type="number" formControlName="minStockThreshold" min="0">
                 </div>
+
+                <div class="form-field">
+                    <label>Мин. срок на годност (дни)</label>
+
+                    <input type="number" formControlName="minShelfLifeDays" min="0" placeholder="0 = без ограничение">
+                </div>
             </div>
 
             <div class="form-actions">
@@ -76,6 +82,7 @@
                 <th>Категория</th>
                 <th>Мерна ед.</th>
                 <th>Мин. наличност</th>
+                <th>Мин. срок (дни)</th>
                 <th>Действия</th>
             </tr>
         </thead>
@@ -88,6 +95,7 @@
                     <td>{{ product.category || '—' }}</td>
                     <td>{{ product.unit }}</td>
                     <td>{{ product.minStockThreshold }}</td>
+                    <td>{{ product.minShelfLifeDays || '—' }}</td>
                     <td class="actions">
                         <button class="action-btn" (click)="openForm(product)">Редактирай</button>
                         <button class="action-btn delete" (click)="deleteProduct(product.id)">Изтрий</button>
@@ -95,7 +103,7 @@
                 </tr>
             } @empty {
                 <tr>
-                    <td colspan="6" class="empty">Няма продукти. Добавете първия продукт отгоре.</td>
+                    <td colspan="7" class="empty">Няма продукти. Добавете първия продукт отгоре.</td>
                 </tr>
             }
         </tbody>

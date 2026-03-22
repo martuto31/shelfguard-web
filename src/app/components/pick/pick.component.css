@@ -36,6 +36,21 @@
     font-size: 14px;
 }
 
+.expired-warning {
+    background: var(--status-critical-bg);
+    color: var(--status-critical-text);
+}
+
+.days-critical {
+    color: var(--status-critical-text);
+    font-weight: 600;
+}
+
+.days-warning {
+    color: var(--status-warning-text);
+    font-weight: 600;
+}
+
 table {
     margin-bottom: 16px;
 }

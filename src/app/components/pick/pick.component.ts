@@ -34,6 +34,7 @@ export class PickComponent {
   public quantity = signal<number | null>(null);
   public suggestions = signal<PickSuggestion[]>([]);
   public totalQuantity = signal(0);
+  public expiredCount = signal(0);
   public isLoading = signal(false);
   public showSuggestions = signal(false);
 
@@ -71,6 +72,7 @@ export class PickComponent {
     if (response.status === 200 && response.data) {
       this.suggestions.set(response.data.suggestions);
       this.totalQuantity.set(response.data.totalQuantity);
+      this.expiredCount.set(response.data.expiredCount);
       this.showSuggestions.set(true);
     } else if (response.status === 404) {
       this.snackbarService.error('Няма налична наличност за този продукт.');
@@ -106,7 +108,15 @@ export class PickComponent {
     this.quantity.set(null);
     this.suggestions.set([]);
     this.totalQuantity.set(0);
+    this.expiredCount.set(0);
     this.showSuggestions.set(false);
+  }
+
+  public getDaysClass(days: number): string {
+    if (days <= 7) return 'days-critical';
+    if (days <= 30) return 'days-warning';
+
+    return '';
   }
 
   public getProductName(): string {

@@ -14,6 +14,7 @@ interface FormControls {
   category: FormControl<string | null>;
   unit: FormControl<string | null>;
   minStockThreshold: FormControl<number | null>;
+  minShelfLifeDays: FormControl<number | null>;
 }
 
 @Component({
@@ -63,17 +64,18 @@ export class ProductsComponent {
         category: product.category,
         unit: product.unit,
         minStockThreshold: product.minStockThreshold,
+        minShelfLifeDays: product.minShelfLifeDays,
       });
     } else {
       this.editingId.set(null);
-      this.formGroup.reset({ unit: 'pcs', minStockThreshold: 0 });
+      this.formGroup.reset({ unit: 'pcs', minStockThreshold: 0, minShelfLifeDays: 0 });
     }
   }
 
   public closeForm(): void {
     this.showForm.set(false);
     this.editingId.set(null);
-    this.formGroup.reset({ unit: 'pcs', minStockThreshold: 0 });
+    this.formGroup.reset({ unit: 'pcs', minStockThreshold: 0, minShelfLifeDays: 0 });
   }
 
   public async save(): Promise<void> {
@@ -91,6 +93,7 @@ export class ProductsComponent {
       category: this.formGroup.controls.category.value || undefined,
       unit: this.formGroup.controls.unit.value || 'pcs',
       minStockThreshold: this.formGroup.controls.minStockThreshold.value || 0,
+      minShelfLifeDays: this.formGroup.controls.minShelfLifeDays.value || 0,
     };
 
     if (this.editingId()) {
@@ -144,6 +147,7 @@ export class ProductsComponent {
       category: this.formBuilder.control(''),
       unit: this.formBuilder.control('pcs'),
       minStockThreshold: this.formBuilder.control(0),
+      minShelfLifeDays: this.formBuilder.control(0),
     };
 
     this.formGroup = this.formBuilder.group(formControls);

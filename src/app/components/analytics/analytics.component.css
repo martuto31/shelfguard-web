@@ -1,0 +1,227 @@
+/* layout → spacing → sizing → visual → typography → effects */
+
+.loading {
+    color: var(--font-medium-emphasis);
+    font-size: 14px;
+}
+
+.empty-state {
+    padding: 48px 24px;
+    background: var(--bg-white);
+    border: 1px solid var(--border-white);
+    border-radius: 12px;
+    color: var(--font-medium-emphasis);
+    text-align: center;
+}
+
+/* KPI Grid */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.kpi-card {
+    padding: 20px;
+    background: var(--bg-white);
+    border: 1px solid var(--border-white);
+    border-radius: 12px;
+}
+
+.kpi-label {
+    margin-bottom: 4px;
+    font-size: 13px;
+    color: var(--font-medium-emphasis);
+}
+
+.kpi-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--font-high-emphasis);
+}
+
+.kpi-value.critical {
+    color: var(--status-critical-text);
+}
+
+.kpi-value.warning {
+    color: var(--status-warning-text);
+}
+
+.kpi-sub {
+    margin-top: 2px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.kpi-sub.critical {
+    color: var(--status-critical-text);
+}
+
+/* Analytics Sections */
+
+.analytics-section {
+    margin-bottom: 32px;
+}
+
+.analytics-section h3 {
+    margin-bottom: 16px;
+    font-size: 18px;
+}
+
+/* Table Enhancements */
+
+.number {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.critical {
+    background: var(--status-critical-bg);
+    color: var(--status-critical-text);
+}
+
+.status-badge.warning {
+    background: var(--status-warning-bg);
+    color: var(--status-warning-text);
+}
+
+.status-badge.good {
+    background: var(--status-good-bg);
+    color: var(--status-good-text);
+}
+
+.status-badge.muted {
+    background: var(--status-muted-bg);
+    color: var(--status-muted-text);
+}
+
+.days-hint {
+    margin-left: 4px;
+    font-size: 12px;
+    color: var(--font-medium-emphasis);
+}
+
+.critical {
+    color: var(--status-critical-text);
+    font-weight: 600;
+}
+
+.warning {
+    color: var(--status-warning-text);
+    font-weight: 600;
+}
+
+/* Expiry Risk Grid */
+
+.risk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.risk-card {
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.risk-card.expired {
+    background: var(--status-critical-bg);
+}
+
+.risk-card.critical {
+    background: #fff1f2;
+}
+
+.risk-card.warning {
+    background: var(--status-warning-bg);
+}
+
+.risk-card.monitor {
+    background: #eff6ff;
+}
+
+.risk-card.safe {
+    background: var(--status-good-bg);
+}
+
+.risk-label {
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.risk-card.expired .risk-label {
+    color: var(--status-critical-text);
+}
+
+.risk-card.critical .risk-label {
+    color: #be123c;
+}
+
+.risk-card.warning .risk-label {
+    color: var(--status-warning-text);
+}
+
+.risk-card.monitor .risk-label {
+    color: #1e40af;
+}
+
+.risk-card.safe .risk-label {
+    color: var(--status-good-text);
+}
+
+.risk-count {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--font-high-emphasis);
+}
+
+.risk-qty {
+    margin-top: 2px;
+    font-size: 13px;
+    color: var(--font-medium-emphasis);
+}
+
+/* Waste & Movement Values */
+
+.waste-value {
+    color: var(--status-critical-text);
+    font-weight: 600;
+}
+
+.shelf-life {
+    font-weight: 600;
+}
+
+.shelf-life.critical {
+    color: var(--status-critical-text);
+}
+
+.shelf-life.warning {
+    color: var(--status-warning-text);
+}
+
+.shelf-life.good {
+    color: var(--status-good-text);
+}
+
+.in-value {
+    color: var(--status-good-text);
+    font-weight: 600;
+}
+
+.out-value {
+    color: var(--primary-brand);
+    font-weight: 600;
+}

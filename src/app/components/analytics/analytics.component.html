@@ -1,0 +1,259 @@
+<h2>Анализи</h2>
+
+@if (isLoading()) {
+    <p class="loading">Зареждане...</p>
+} @else if (summary()) {
+
+    <!-- KPI Summary Cards -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-label">Продукти</div>
+            <div class="kpi-value">{{ summary()!.totalProducts }}</div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-label">Обща наличност</div>
+            <div class="kpi-value">{{ summary()!.totalStock }}</div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-label">Изтекли партиди</div>
+            <div class="kpi-value" [class.critical]="summary()!.expiredBatches > 0">
+                {{ summary()!.expiredBatches }}
+            </div>
+            @if (summary()!.expiredQuantity > 0) {
+                <div class="kpi-sub critical">{{ summary()!.expiredQuantity }} бр.</div>
+            }
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-label">Нисък запас</div>
+            <div class="kpi-value" [class.warning]="summary()!.lowStockProducts > 0">
+                {{ summary()!.lowStockProducts }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-label">Пикирано (месец)</div>
+            <div class="kpi-value">{{ summary()!.picksThisMonth }}</div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-label">Загуби</div>
+            <div class="kpi-value" [class.critical]="summary()!.wasteRate >= 10" [class.warning]="summary()!.wasteRate >= 5 && summary()!.wasteRate < 10">
+                {{ summary()!.wasteRate }}%
+            </div>
+        </div>
+    </div>
+
+    <!-- Stock by Product -->
+    <div class="analytics-section">
+        <h3>Наличност по продукти</h3>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Продукт</th>
+                        <th>SKU</th>
+                        <th>Наличност</th>
+                        <th>Мин. праг</th>
+                        <th>Статус</th>
+                        <th>Партиди</th>
+                        <th>Най-ранен срок</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (item of stockByProduct(); track item.productId) {
+                        <tr>
+                            <td>{{ item.productName }}</td>
+                            <td>{{ item.sku }}</td>
+                            <td class="number">{{ item.totalRemaining }} {{ item.unit }}</td>
+                            <td class="number">{{ item.minStockThreshold }}</td>
+                            <td>
+                                <span class="status-badge" [class]="getStockStatusClass(item)">
+                                    {{ getStockStatusLabel(item) }}
+                                </span>
+                            </td>
+                            <td class="number">{{ item.activeBatches }}</td>
+                            <td [class]="item.earliestExpiry ? getExpiryClass(item.earliestExpiry) : ''">
+                                @if (item.earliestExpiry) {
+                                    {{ item.earliestExpiry | date:'dd MMM yyyy' }}
+                                    <span class="days-hint">({{ getDaysUntilExpiry(item.earliestExpiry) }}д)</span>
+                                } @else {
+                                    —
+                                }
+                            </td>
+                        </tr>
+                    } @empty {
+                        <tr>
+                            <td colspan="7" class="empty">Няма данни за наличности.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Expiry Risk -->
+    @if (expiryRisk() && getTotalExpiryRiskCount() > 0) {
+        <div class="analytics-section">
+            <h3>Риск от изтичане</h3>
+
+            <div class="risk-grid">
+                @if (expiryRisk()!.expired.count > 0) {
+                    <div class="risk-card expired">
+                        <div class="risk-label">Изтекли</div>
+                        <div class="risk-count">{{ expiryRisk()!.expired.count }} партиди</div>
+                        <div class="risk-qty">{{ expiryRisk()!.expired.quantity }} бр.</div>
+                    </div>
+                }
+
+                @if (expiryRisk()!.critical.count > 0) {
+                    <div class="risk-card critical">
+                        <div class="risk-label">Критични (≤7 дни)</div>
+                        <div class="risk-count">{{ expiryRisk()!.critical.count }} партиди</div>
+                        <div class="risk-qty">{{ expiryRisk()!.critical.quantity }} бр.</div>
+                    </div>
+                }
+
+                @if (expiryRisk()!.warning.count > 0) {
+                    <div class="risk-card warning">
+                        <div class="risk-label">Внимание (≤30 дни)</div>
+                        <div class="risk-count">{{ expiryRisk()!.warning.count }} партиди</div>
+                        <div class="risk-qty">{{ expiryRisk()!.warning.quantity }} бр.</div>
+                    </div>
+                }
+
+                @if (expiryRisk()!.monitor.count > 0) {
+                    <div class="risk-card monitor">
+                        <div class="risk-label">Наблюдение (≤90 дни)</div>
+                        <div class="risk-count">{{ expiryRisk()!.monitor.count }} партиди</div>
+                        <div class="risk-qty">{{ expiryRisk()!.monitor.quantity }} бр.</div>
+                    </div>
+                }
+
+                @if (expiryRisk()!.safe.count > 0) {
+                    <div class="risk-card safe">
+                        <div class="risk-label">Безопасни (90+ дни)</div>
+                        <div class="risk-count">{{ expiryRisk()!.safe.count }} партиди</div>
+                        <div class="risk-qty">{{ expiryRisk()!.safe.quantity }} бр.</div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- Waste by Product -->
+    @if (wasteByProduct().length > 0) {
+        <div class="analytics-section">
+            <h3>Загуби по продукти</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Продукт</th>
+                            <th>SKU</th>
+                            <th>Получено</th>
+                            <th>Загубено</th>
+                            <th>Загуби %</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (item of wasteByProduct(); track item.productId) {
+                            <tr>
+                                <td>{{ item.productName }}</td>
+                                <td>{{ item.sku }}</td>
+                                <td class="number">{{ item.totalReceived }}</td>
+                                <td class="number" [class]="item.totalWasted > 0 ? 'waste-value' : ''">
+                                    {{ item.totalWasted }}
+                                </td>
+                                <td [class]="getWasteClass(item.wasteRate)">
+                                    <strong>{{ item.wasteRate }}%</strong>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    <!-- Supplier Performance -->
+    @if (supplierPerformance().length > 0) {
+        <div class="analytics-section">
+            <h3>Оценка на доставчици</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Доставчик</th>
+                            <th>Партиди</th>
+                            <th>Ср. срок при доставка</th>
+                            <th>Загубено кол.</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (item of supplierPerformance(); track item.supplierId) {
+                            <tr>
+                                <td>{{ item.supplierName }}</td>
+                                <td class="number">{{ item.totalBatches }}</td>
+                                <td>
+                                    <span class="shelf-life" [class]="getShelfLifeClass(item.avgShelfLifeDays)">
+                                        {{ item.avgShelfLifeDays }} дни
+                                    </span>
+                                </td>
+                                <td class="number" [class]="item.wastedQuantity > 0 ? 'waste-value' : ''">
+                                    {{ item.wastedQuantity }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    <!-- Monthly Movements -->
+    @if (movementsByMonth().length > 0) {
+        <div class="analytics-section">
+            <h3>Движения по месеци</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Месец</th>
+                            <th>Получено (IN)</th>
+                            <th>Пикирано (OUT)</th>
+                            <th>Нетно</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (item of movementsByMonth(); track item.month) {
+                            <tr>
+                                <td>{{ formatMonth(item.month) }}</td>
+                                <td class="number in-value">+{{ item.totalIn }}</td>
+                                <td class="number out-value">-{{ item.totalOut }}</td>
+                                <td class="number" [class]="item.totalIn - item.totalOut >= 0 ? 'in-value' : 'out-value'">
+                                    {{ item.totalIn - item.totalOut >= 0 ? '+' : '' }}{{ item.totalIn - item.totalOut }}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+} @else {
+    <div class="empty-state">
+        <p>Няма достатъчно данни за анализ. Добавете продукти и партиди.</p>
+    </div>
+}

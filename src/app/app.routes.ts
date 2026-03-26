@@ -52,6 +52,13 @@ export const routes: Routes = [
     },
 
     {
+      path: 'write-off',
+      loadComponent: () => import('./components/write-off/write-off.component').then(c => c.WriteOffComponent),
+      title: 'Бракуване — ShelfGuard',
+      canActivate: [authGuard(Role.OWNER, Role.MANAGER)],
+    },
+
+    {
       path: 'analytics',
       loadComponent: () => import('./components/analytics/analytics.component').then(c => c.AnalyticsComponent),
       title: 'Анализи — ShelfGuard',

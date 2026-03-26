@@ -10,6 +10,8 @@
             <a routerLink="/pick" routerLinkActive="active">Пикиране</a>
 
             @if (userService.user()!.role === Role.OWNER || userService.user()!.role === Role.MANAGER) {
+                <a routerLink="/write-off" routerLinkActive="active">Бракуване</a>
+
                 <a routerLink="/analytics" routerLinkActive="active">Анализи</a>
             }
 

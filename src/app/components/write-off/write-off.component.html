@@ -1,0 +1,92 @@
+<div class="page-header">
+    <h2>Бракуване</h2>
+</div>
+
+@if (isLoading()) {
+    <p class="loading">Зареждане...</p>
+} @else if (rows().length > 0) {
+
+    <div class="write-off-controls">
+        <div class="form-row">
+            <div class="form-field">
+                <label>Причина</label>
+
+                <select [value]="reason()" (change)="onReasonChange($event)">
+                    <option value="Изтекъл срок">Изтекъл срок</option>
+                    <option value="Повредена стока">Повредена стока</option>
+                    <option value="Изтеглена стока">Изтеглена стока</option>
+                    <option value="Друго">Друго</option>
+                </select>
+            </div>
+
+            <div class="form-field btn-field">
+                <button class="btn btn-secondary small-btn" (click)="toggleAll()">
+                    {{ allSelected() ? 'Премахни всички' : 'Избери всички' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th class="checkbox-col"></th>
+                    <th>Продукт</th>
+                    <th>SKU</th>
+                    <th>Партида</th>
+                    <th>Изтекъл на</th>
+                    <th>Дни изтекли</th>
+                    <th>Налично</th>
+                    <th>За бракуване</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @for (row of rows(); track row.batchId; let i = $index) {
+                    <tr [class.selected]="row.selected">
+                        <td class="checkbox-col">
+                            <input type="checkbox" [checked]="row.selected" (change)="toggleRow(i)">
+                        </td>
+                        <td>{{ row.productName }}</td>
+                        <td>{{ row.sku }}</td>
+                        <td>{{ row.batchNumber }}</td>
+                        <td>{{ row.expiryDate | date:'dd MMM yyyy' }}</td>
+                        <td class="days-expired">{{ row.daysExpired }}д</td>
+                        <td class="number">{{ row.quantityRemaining }} {{ row.unit }}</td>
+                        <td>
+                            <input
+                                type="number"
+                                class="qty-input"
+                                [value]="row.writeOffQuantity"
+                                (input)="onQuantityChange(i, $event)"
+                                [min]="1"
+                                [max]="row.quantityRemaining"
+                                [disabled]="!row.selected">
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="write-off-summary">
+        <div class="summary-info">
+            <span>Избрани: <strong>{{ selectedCount() }}</strong> партиди</span>
+
+            <span>Общо за бракуване: <strong>{{ totalWriteOff() }}</strong> бр.</span>
+        </div>
+
+        <button
+            class="btn btn-primary"
+            (click)="confirmWriteOff()"
+            [disabled]="isConfirming() || selectedCount() === 0">
+            {{ isConfirming() ? 'Обработка...' : 'Потвърди бракуване' }}
+        </button>
+    </div>
+
+} @else {
+    <div class="empty-state">
+        <p>Няма изтекли партиди за бракуване.</p>
+    </div>
+}

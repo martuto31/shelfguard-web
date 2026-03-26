@@ -1,0 +1,105 @@
+/* layout -> spacing -> sizing -> visual -> typography -> effects */
+
+.loading {
+    color: var(--font-medium-emphasis);
+    font-size: 14px;
+}
+
+.empty-state {
+    padding: 48px 24px;
+    background: var(--bg-white);
+    border: 1px solid var(--border-white);
+    border-radius: 12px;
+    color: var(--font-medium-emphasis);
+    text-align: center;
+}
+
+/* Controls */
+
+.write-off-controls {
+    padding: 24px;
+    margin-bottom: 24px;
+    background: var(--bg-white);
+    border: 1px solid var(--border-white);
+    border-radius: 12px;
+}
+
+.write-off-controls .form-row {
+    align-items: flex-end;
+    margin-bottom: 0;
+}
+
+.btn-field {
+    flex: 0;
+}
+
+/* Table */
+
+.checkbox-col {
+    width: 40px;
+    text-align: center;
+}
+
+.checkbox-col input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+tr.selected {
+    background: var(--bg-secondary);
+}
+
+.number {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.days-expired {
+    color: var(--status-critical-text);
+    font-weight: 600;
+}
+
+.qty-input {
+    width: 80px;
+    padding: 6px 8px;
+    border: 1px solid var(--border-white);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    text-align: right;
+}
+
+.qty-input:focus {
+    outline: none;
+    border-color: var(--primary-brand);
+}
+
+.qty-input:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Summary & Actions */
+
+.write-off-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    margin-top: 24px;
+    background: var(--bg-white);
+    border: 1px solid var(--border-white);
+    border-radius: 12px;
+}
+
+.summary-info {
+    display: flex;
+    gap: 24px;
+    color: var(--font-medium-emphasis);
+    font-size: 14px;
+}
+
+.summary-info strong {
+    color: var(--font-high-emphasis);
+}

@@ -1,4 +1,6 @@
-<h2>Анализи</h2>
+<div class="page-header">
+    <h2>Анализи</h2>
+</div>
 
 @if (isLoading()) {
     <p class="loading">Зареждане...</p>
@@ -8,19 +10,23 @@
     <div class="kpi-grid">
         <div class="kpi-card">
             <div class="kpi-label">Продукти</div>
+
             <div class="kpi-value">{{ summary()!.totalProducts }}</div>
         </div>
 
         <div class="kpi-card">
             <div class="kpi-label">Обща наличност</div>
+
             <div class="kpi-value">{{ summary()!.totalStock }}</div>
         </div>
 
         <div class="kpi-card">
             <div class="kpi-label">Изтекли партиди</div>
+
             <div class="kpi-value" [class.critical]="summary()!.expiredBatches > 0">
                 {{ summary()!.expiredBatches }}
             </div>
+
             @if (summary()!.expiredQuantity > 0) {
                 <div class="kpi-sub critical">{{ summary()!.expiredQuantity }} бр.</div>
             }
@@ -28,6 +34,7 @@
 
         <div class="kpi-card">
             <div class="kpi-label">Нисък запас</div>
+
             <div class="kpi-value" [class.warning]="summary()!.lowStockProducts > 0">
                 {{ summary()!.lowStockProducts }}
             </div>
@@ -35,11 +42,13 @@
 
         <div class="kpi-card">
             <div class="kpi-label">Пикирано (месец)</div>
+
             <div class="kpi-value">{{ summary()!.picksThisMonth }}</div>
         </div>
 
         <div class="kpi-card">
             <div class="kpi-label">Загуби</div>
+
             <div class="kpi-value" [class.critical]="summary()!.wasteRate >= 10" [class.warning]="summary()!.wasteRate >= 5 && summary()!.wasteRate < 10">
                 {{ summary()!.wasteRate }}%
             </div>
@@ -57,7 +66,7 @@
                         <th>Продукт</th>
                         <th>SKU</th>
                         <th>Наличност</th>
-                        <th>Мин. праг</th>
+                        <th>Мін. праг</th>
                         <th>Статус</th>
                         <th>Партиди</th>
                         <th>Най-ранен срок</th>
@@ -105,7 +114,9 @@
                 @if (expiryRisk()!.expired.count > 0) {
                     <div class="risk-card expired">
                         <div class="risk-label">Изтекли</div>
+
                         <div class="risk-count">{{ expiryRisk()!.expired.count }} партиди</div>
+
                         <div class="risk-qty">{{ expiryRisk()!.expired.quantity }} бр.</div>
                     </div>
                 }
@@ -113,7 +124,9 @@
                 @if (expiryRisk()!.critical.count > 0) {
                     <div class="risk-card critical">
                         <div class="risk-label">Критични (≤7 дни)</div>
+
                         <div class="risk-count">{{ expiryRisk()!.critical.count }} партиди</div>
+
                         <div class="risk-qty">{{ expiryRisk()!.critical.quantity }} бр.</div>
                     </div>
                 }
@@ -121,7 +134,9 @@
                 @if (expiryRisk()!.warning.count > 0) {
                     <div class="risk-card warning">
                         <div class="risk-label">Внимание (≤30 дни)</div>
+
                         <div class="risk-count">{{ expiryRisk()!.warning.count }} партиди</div>
+
                         <div class="risk-qty">{{ expiryRisk()!.warning.quantity }} бр.</div>
                     </div>
                 }
@@ -129,7 +144,9 @@
                 @if (expiryRisk()!.monitor.count > 0) {
                     <div class="risk-card monitor">
                         <div class="risk-label">Наблюдение (≤90 дни)</div>
+
                         <div class="risk-count">{{ expiryRisk()!.monitor.count }} партиди</div>
+
                         <div class="risk-qty">{{ expiryRisk()!.monitor.quantity }} бр.</div>
                     </div>
                 }
@@ -137,7 +154,9 @@
                 @if (expiryRisk()!.safe.count > 0) {
                     <div class="risk-card safe">
                         <div class="risk-label">Безопасни (90+ дни)</div>
+
                         <div class="risk-count">{{ expiryRisk()!.safe.count }} партиди</div>
+
                         <div class="risk-qty">{{ expiryRisk()!.safe.quantity }} бр.</div>
                     </div>
                 }

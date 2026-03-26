@@ -1,48 +1,148 @@
-<h2>Табло</h2>
+<div class="page-header">
+    <h2>Табло</h2>
+
+    <div class="quick-actions">
+        <a routerLink="/batches" class="btn btn-primary small-btn">+ Приеми стока</a>
+
+        <a routerLink="/pick" class="btn btn-secondary small-btn">Пикирай</a>
+    </div>
+</div>
 
 @if (isLoading()) {
     <p class="loading">Зареждане...</p>
-} @else if (groups().length === 0) {
-    <div class="empty-state">
-        <p>Няма партиди с изтичащ срок в следващите 90 дни.</p>
-    </div>
-} @else {
-    @for (group of groups(); track group.label) {
-        <div class="expiry-group">
-            <div class="group-header" [class]="group.cssClass">
-                <h3>{{ group.label }}</h3>
+} @else if (summary()) {
 
-                <span class="count">{{ group.batches.length }} партид{{ group.batches.length === 1 ? 'а' : 'и' }}</span>
+    <!-- KPI Summary Cards -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-label">Продукти</div>
+
+            <div class="kpi-value">{{ summary()!.totalProducts }}</div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-label">Обща наличност</div>
+
+            <div class="kpi-value">{{ summary()!.totalStock }}</div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-label">Изтекли партиди</div>
+
+            <div class="kpi-value" [class.critical]="summary()!.expiredBatches > 0">
+                {{ summary()!.expiredBatches }}
             </div>
 
-            <div class="batch-cards">
-                @for (batch of group.batches; track batch.id) {
-                    <div class="batch-card" [class]="group.cssClass">
-                        <div class="card-header">
-                            <span class="product-name">{{ getProductName(batch) }}</span>
+            @if (summary()!.expiredQuantity > 0) {
+                <div class="kpi-sub critical">{{ summary()!.expiredQuantity }} бр.</div>
+            }
+        </div>
 
-                            <span class="days-badge" [class]="group.cssClass">{{ getDaysUntilExpiry(batch) }}д</span>
-                        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Нисък запас</div>
 
-                        <div class="card-body">
-                            <div class="card-row">
-                                <span class="label">Партида</span>
-                                <span>{{ batch.batchNumber }}</span>
-                            </div>
+            <div class="kpi-value" [class.warning]="summary()!.lowStockProducts > 0">
+                {{ summary()!.lowStockProducts }}
+            </div>
+        </div>
 
-                            <div class="card-row">
-                                <span class="label">Изтича</span>
-                                <span>{{ batch.expiryDate | date:'dd MMM yyyy' }}</span>
-                            </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Пикирано (месец)</div>
 
-                            <div class="card-row">
-                                <span class="label">Остатък</span>
-                                <span class="qty">{{ batch.quantityRemaining }}</span>
-                            </div>
-                        </div>
-                    </div>
-                }
+            <div class="kpi-value">{{ summary()!.picksThisMonth }}</div>
+        </div>
+    </div>
+
+    <!-- Low Stock Alerts -->
+    @if (lowStockAlerts().length > 0) {
+        <div class="dashboard-section">
+            <h3 class="section-title warning-title">Нисък запас</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Продукт</th>
+                            <th>SKU</th>
+                            <th>Налично</th>
+                            <th>Мін. праг</th>
+                            <th>Дефицит</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (alert of lowStockAlerts(); track alert.productId) {
+                            <tr>
+                                <td>{{ alert.productName }}</td>
+                                <td>{{ alert.sku }}</td>
+                                <td class="number">
+                                    <span class="low-stock-value">{{ alert.currentStock }} {{ alert.unit }}</span>
+                                </td>
+                                <td class="number">{{ alert.minStockThreshold }}</td>
+                                <td class="number deficit">-{{ getDeficit(alert) }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     }
+
+    <!-- Expiring Batches -->
+    @if (groups().length > 0) {
+        <div class="dashboard-section">
+            <h3 class="section-title">Изтичащи партиди</h3>
+
+            @for (group of groups(); track group.label) {
+                <div class="expiry-group">
+                    <div class="group-header" [class]="group.cssClass">
+                        <h4>{{ group.label }}</h4>
+
+                        <span class="count">{{ group.batches.length }} партид{{ group.batches.length === 1 ? 'а' : 'и' }}</span>
+                    </div>
+
+                    <div class="batch-cards">
+                        @for (batch of group.batches; track batch.id) {
+                            <div class="batch-card" [class]="group.cssClass">
+                                <div class="card-header">
+                                    <span class="product-name">{{ batch.productName }}</span>
+
+                                    <span class="days-badge" [class]="group.cssClass">{{ getDaysUntilExpiry(batch) }}д</span>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="card-row">
+                                        <span class="label">Партида</span>
+                                        <span>{{ batch.batchNumber }}</span>
+                                    </div>
+
+                                    <div class="card-row">
+                                        <span class="label">Изтича</span>
+                                        <span>{{ batch.expiryDate | date:'dd MMM yyyy' }}</span>
+                                    </div>
+
+                                    <div class="card-row">
+                                        <span class="label">Остатък</span>
+                                        <span class="qty">{{ batch.quantityRemaining }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Empty state if no alerts and no expiring -->
+    @if (lowStockAlerts().length === 0 && groups().length === 0 && summary()!.expiredBatches === 0) {
+        <div class="empty-state">
+            <p>Всичко е наред. Няма предупреждения.</p>
+        </div>
+    }
+
+} @else {
+    <div class="empty-state">
+        <p>Няма данни. Добавете продукти и партиди.</p>
+    </div>
 }

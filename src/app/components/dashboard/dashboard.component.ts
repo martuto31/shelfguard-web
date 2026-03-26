@@ -1,18 +1,22 @@
 import { DatePipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { lastValueFrom } from 'rxjs';
 
-import { BatchService } from './../../services/batch.service';
+import { DashboardService } from './../../services/dashboard.service';
 import { SnackbarService } from './../../services/snackbar.service';
 
-import { Batch } from './../../models/batch.model';
-import { Product } from './../../models/product.model';
+import {
+    DashboardSummary,
+    LowStockAlert,
+    ExpiringBatch,
+} from './../../models/dashboard.model';
 
 interface ExpiryGroup {
   label: string;
   cssClass: string;
-  batches: Batch[];
+  batches: ExpiringBatch[];
 }
 
 @Component({
@@ -21,29 +25,33 @@ interface ExpiryGroup {
     styleUrl: './dashboard.component.css',
     imports: [
         DatePipe,
+        RouterLink,
     ]
 })
 
 export class DashboardComponent {
 
   constructor(
-    private batchService: BatchService,
+    private dashboardService: DashboardService,
     private snackbarService: SnackbarService) {
 
-    this.loadExpiring();
+    this.load();
   }
 
-  public groups = signal<ExpiryGroup[]>([]);
   public isLoading = signal(false);
+  public summary = signal<DashboardSummary | null>(null);
+  public lowStockAlerts = signal<LowStockAlert[]>([]);
+  public groups = signal<ExpiryGroup[]>([]);
 
-  public async loadExpiring(): Promise<void> {
+  public async load(): Promise<void> {
     this.isLoading.set(true);
 
-    const response = await lastValueFrom(this.batchService.getExpiring(90));
+    const response = await lastValueFrom(this.dashboardService.get());
 
-    if (response.status === 200) {
-      const batches = response.data || [];
-      this.groups.set(this.groupByExpiry(batches));
+    if (response.status === 200 && response.data) {
+      this.summary.set(response.data.summary);
+      this.lowStockAlerts.set(response.data.lowStockAlerts);
+      this.groups.set(this.groupByExpiry(response.data.expiringBatches));
     } else {
       this.snackbarService.error('Неуспешно зареждане на данни.');
     }
@@ -51,34 +59,24 @@ export class DashboardComponent {
     this.isLoading.set(false);
   }
 
-  public getProductName(batch: Batch): string {
-    if (typeof batch.productId === 'object') {
-      return (batch.productId as Product).name;
-    }
-
-    return '';
-  }
-
-  public getDaysUntilExpiry(batch: Batch): number {
+  public getDaysUntilExpiry(batch: ExpiringBatch): number {
     const now = new Date();
     const expiry = new Date(batch.expiryDate);
 
     return Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
   }
 
-  private groupByExpiry(batches: Batch[]): ExpiryGroup[] {
-    const now = new Date();
-    const critical: Batch[] = [];
-    const warning: Batch[] = [];
-    const good: Batch[] = [];
+  public getDeficit(alert: LowStockAlert): number {
+    return alert.minStockThreshold - alert.currentStock;
+  }
+
+  private groupByExpiry(batches: ExpiringBatch[]): ExpiryGroup[] {
+    const critical: ExpiringBatch[] = [];
+    const warning: ExpiringBatch[] = [];
+    const good: ExpiringBatch[] = [];
 
     for (const batch of batches) {
-      const expiry = new Date(batch.expiryDate);
-      const days = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-
-      if (days <= 0) {
-        continue;
-      }
+      const days = this.getDaysUntilExpiry(batch);
 
       if (days <= 30) {
         critical.push(batch);

@@ -14,8 +14,95 @@
     text-align: center;
 }
 
-.expiry-group {
+/* Quick Actions */
+
+.quick-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* KPI Grid */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 16px;
     margin-bottom: 32px;
+}
+
+.kpi-card {
+    padding: 20px;
+    background: var(--bg-white);
+    border: 1px solid var(--border-white);
+    border-radius: 12px;
+}
+
+.kpi-label {
+    margin-bottom: 4px;
+    font-size: 13px;
+    color: var(--font-medium-emphasis);
+}
+
+.kpi-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--font-high-emphasis);
+}
+
+.kpi-value.critical {
+    color: var(--status-critical-text);
+}
+
+.kpi-value.warning {
+    color: var(--status-warning-text);
+}
+
+.kpi-sub {
+    margin-top: 2px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.kpi-sub.critical {
+    color: var(--status-critical-text);
+}
+
+/* Dashboard Sections */
+
+.dashboard-section {
+    margin-bottom: 32px;
+}
+
+.section-title {
+    margin-bottom: 16px;
+    font-size: 18px;
+}
+
+.warning-title {
+    color: var(--status-warning-text);
+}
+
+/* Low Stock Table */
+
+.number {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.low-stock-value {
+    color: var(--status-warning-text);
+    font-weight: 600;
+}
+
+.deficit {
+    color: var(--status-critical-text);
+    font-weight: 600;
+}
+
+/* Expiry Groups */
+
+.expiry-group {
+    margin-bottom: 24px;
 }
 
 .group-header {
@@ -39,20 +126,20 @@
     background: var(--status-good-bg);
 }
 
-.group-header h3 {
+.group-header h4 {
     margin: 0;
-    font-size: 16px;
+    font-size: 15px;
 }
 
-.group-header.critical h3 {
+.group-header.critical h4 {
     color: var(--status-critical-text);
 }
 
-.group-header.warning h3 {
+.group-header.warning h4 {
     color: var(--status-warning-text);
 }
 
-.group-header.good h3 {
+.group-header.good h4 {
     color: var(--status-good-text);
 }
 

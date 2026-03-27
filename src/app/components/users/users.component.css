@@ -1,0 +1,50 @@
+/* layout -> spacing -> sizing -> visual -> typography -> effects */
+
+/* Badges */
+
+.role-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.role-badge.owner {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary-brand);
+}
+
+.role-badge.manager {
+    background: var(--status-good-bg);
+    color: var(--status-good-text);
+}
+
+.role-badge.worker {
+    background: var(--status-muted-bg);
+    color: var(--status-muted-text);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: var(--status-good-bg);
+    color: var(--status-good-text);
+}
+
+.status-badge.inactive {
+    background: var(--status-critical-bg);
+    color: var(--status-critical-text);
+}
+
+/* Inactive Row */
+
+tr.inactive {
+    opacity: 0.6;
+}

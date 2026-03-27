@@ -1,0 +1,119 @@
+<div class="page-header">
+    <h2>Потребители</h2>
+
+    <button class="btn btn-primary small-btn" (click)="openForm()">+ Добави потребител</button>
+</div>
+
+@if (showForm()) {
+    <div class="form-card">
+        <h3>{{ editingId() ? 'Редактиране на потребител' : 'Нов потребител' }}</h3>
+
+        <form [formGroup]="formGroup" (ngSubmit)="save()">
+            <div class="form-row">
+                <div class="form-field">
+                    <label>Име</label>
+
+                    <input type="text" formControlName="name" placeholder="Име на потребител">
+
+                    @if (hasError('name', 'required')) {
+                        <span class="error">Задължително</span>
+                    }
+                </div>
+
+                @if (!editingId()) {
+                    <div class="form-field">
+                        <label>Имейл</label>
+
+                        <input type="email" formControlName="email" placeholder="example&#64;email.com">
+
+                        @if (hasError('email', 'required')) {
+                            <span class="error">Задължително</span>
+                        }
+
+                        @if (hasError('email', 'email')) {
+                            <span class="error">Невалиден имейл</span>
+                        }
+                    </div>
+                }
+            </div>
+
+            <div class="form-row">
+                @if (!editingId()) {
+                    <div class="form-field">
+                        <label>Парола</label>
+
+                        <input type="password" formControlName="password" placeholder="Мин. 6 символа">
+
+                        @if (hasError('password', 'required')) {
+                            <span class="error">Задължително</span>
+                        }
+                    </div>
+                }
+
+                <div class="form-field">
+                    <label>Роля</label>
+
+                    <select formControlName="role">
+                        <option value="OWNER">Собственик</option>
+                        <option value="MANAGER">Мениджър</option>
+                        <option value="WORKER">Работник</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary small-btn" (click)="closeForm()">Отказ</button>
+
+                <button type="submit" class="btn btn-primary small-btn" [disabled]="isLoading()">
+                    {{ isLoading() ? 'Запазване...' : 'Запази' }}
+                </button>
+            </div>
+        </form>
+    </div>
+}
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Име</th>
+                <th>Имейл</th>
+                <th>Роля</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (user of users(); track user.id) {
+                <tr [class.inactive]="!user.active">
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <span class="role-badge" [class]="user.role.toLowerCase()">
+                            {{ getRoleLabel(user.role) }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="status-badge" [class]="user.active ? 'active' : 'inactive'">
+                            {{ user.active ? 'Активен' : 'Неактивен' }}
+                        </span>
+                    </td>
+                    <td class="actions">
+                        @if (!isSelf(user)) {
+                            <button class="action-btn" (click)="openForm(user)">Редактирай</button>
+
+                            <button class="action-btn" [class.delete]="user.active" (click)="toggleActive(user)">
+                                {{ user.active ? 'Деактивирай' : 'Активирай' }}
+                            </button>
+                        }
+                    </td>
+                </tr>
+            } @empty {
+                <tr>
+                    <td colspan="5" class="empty">Няма потребители.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

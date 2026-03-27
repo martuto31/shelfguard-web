@@ -24,3 +24,16 @@ export interface RegisterBody {
     password: string;
     organizationName: string;
 }
+
+export interface CreateUserBody {
+    name: string;
+    email: string;
+    password: string;
+    role: Role;
+}
+
+export interface UpdateUserBody {
+    name?: string;
+    role?: Role;
+    active?: boolean;
+}

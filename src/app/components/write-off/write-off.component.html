@@ -2,17 +2,130 @@
     <h2>Бракуване</h2>
 </div>
 
-@if (isLoading()) {
-    <p class="loading">Зареждане...</p>
-} @else if (rows().length > 0) {
+<div class="tabs">
+    <button class="tab" [class.active]="activeTab() === 'expired'" (click)="setTab('expired')">
+        Изтекли партиди
+        @if (rows().length > 0) {
+            <span class="tab-badge">{{ rows().length }}</span>
+        }
+    </button>
+
+    <button class="tab" [class.active]="activeTab() === 'manual'" (click)="setTab('manual')">
+        Ръчно бракуване
+    </button>
+</div>
+
+@if (activeTab() === 'expired') {
+
+    @if (isLoading()) {
+        <p class="loading">Зареждане...</p>
+    } @else if (rows().length > 0) {
+
+        <div class="write-off-controls">
+            <div class="form-row">
+                <div class="form-field">
+                    <label>Причина</label>
+
+                    <select [value]="reason()" (change)="onReasonChange($event)">
+                        <option value="Изтекъл срок">Изтекъл срок</option>
+                        <option value="Повредена стока">Повредена стока</option>
+                        <option value="Изтеглена стока">Изтеглена стока</option>
+                        <option value="Друго">Друго</option>
+                    </select>
+                </div>
+
+                <div class="form-field btn-field">
+                    <button class="btn btn-secondary small-btn" (click)="toggleAll()">
+                        {{ allSelected() ? 'Премахни всички' : 'Избери всички' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="checkbox-col"></th>
+                        <th>Продукт</th>
+                        <th>SKU</th>
+                        <th>Партида</th>
+                        <th>Изтекъл на</th>
+                        <th>Дни изтекли</th>
+                        <th>Налично</th>
+                        <th>За бракуване</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (row of rows(); track row.batchId; let i = $index) {
+                        <tr [class.selected]="row.selected">
+                            <td class="checkbox-col">
+                                <input type="checkbox" [checked]="row.selected" (change)="toggleRow(i)">
+                            </td>
+                            <td>{{ row.productName }}</td>
+                            <td>{{ row.sku }}</td>
+                            <td>{{ row.batchNumber }}</td>
+                            <td>{{ row.expiryDate | date:'dd MMM yyyy' }}</td>
+                            <td class="days-expired">{{ row.daysExpired }}д</td>
+                            <td class="number">{{ row.quantityRemaining }} {{ row.unit }}</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    class="qty-input"
+                                    [value]="row.writeOffQuantity"
+                                    (input)="onQuantityChange(i, $event)"
+                                    [min]="1"
+                                    [max]="row.quantityRemaining"
+                                    [disabled]="!row.selected">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="write-off-summary">
+            <div class="summary-info">
+                <span>Избрани: <strong>{{ selectedCount() }}</strong> партиди</span>
+
+                <span>Общо за бракуване: <strong>{{ totalWriteOff() }}</strong> бр.</span>
+            </div>
+
+            <button
+                class="btn btn-primary"
+                (click)="confirmWriteOff()"
+                [disabled]="isConfirming() || selectedCount() === 0">
+                {{ isConfirming() ? 'Обработка...' : 'Потвърди бракуване' }}
+            </button>
+        </div>
+
+    } @else {
+        <div class="empty-state">
+            <p>Няма изтекли партиди за бракуване.</p>
+        </div>
+    }
+
+} @else {
 
     <div class="write-off-controls">
         <div class="form-row">
             <div class="form-field">
+                <label>Продукт</label>
+
+                <select [value]="selectedProductId()" (change)="onProductChange($event)">
+                    <option value="">Изберете продукт</option>
+
+                    @for (product of products(); track product.id) {
+                        <option [value]="product.id">{{ product.name }} ({{ product.sku }})</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-field">
                 <label>Причина</label>
 
-                <select [value]="reason()" (change)="onReasonChange($event)">
-                    <option value="Изтекъл срок">Изтекъл срок</option>
+                <select [value]="manualReason()" (change)="onManualReasonChange($event)">
                     <option value="Повредена стока">Повредена стока</option>
                     <option value="Изтеглена стока">Изтеглена стока</option>
                     <option value="Друго">Друго</option>
@@ -20,73 +133,79 @@
             </div>
 
             <div class="form-field btn-field">
-                <button class="btn btn-secondary small-btn" (click)="toggleAll()">
-                    {{ allSelected() ? 'Премахни всички' : 'Избери всички' }}
+                <button class="btn btn-secondary small-btn" (click)="toggleManualAll()" [disabled]="manualRows().length === 0">
+                    {{ manualAllSelected() ? 'Премахни всички' : 'Избери всички' }}
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th class="checkbox-col"></th>
-                    <th>Продукт</th>
-                    <th>SKU</th>
-                    <th>Партида</th>
-                    <th>Изтекъл на</th>
-                    <th>Дни изтекли</th>
-                    <th>Налично</th>
-                    <th>За бракуване</th>
-                </tr>
-            </thead>
+    @if (isLoadingBatches()) {
+        <p class="loading">Зареждане на партиди...</p>
+    } @else if (selectedProductId() && manualRows().length > 0) {
 
-            <tbody>
-                @for (row of rows(); track row.batchId; let i = $index) {
-                    <tr [class.selected]="row.selected">
-                        <td class="checkbox-col">
-                            <input type="checkbox" [checked]="row.selected" (change)="toggleRow(i)">
-                        </td>
-                        <td>{{ row.productName }}</td>
-                        <td>{{ row.sku }}</td>
-                        <td>{{ row.batchNumber }}</td>
-                        <td>{{ row.expiryDate | date:'dd MMM yyyy' }}</td>
-                        <td class="days-expired">{{ row.daysExpired }}д</td>
-                        <td class="number">{{ row.quantityRemaining }} {{ row.unit }}</td>
-                        <td>
-                            <input
-                                type="number"
-                                class="qty-input"
-                                [value]="row.writeOffQuantity"
-                                (input)="onQuantityChange(i, $event)"
-                                [min]="1"
-                                [max]="row.quantityRemaining"
-                                [disabled]="!row.selected">
-                        </td>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="checkbox-col"></th>
+                        <th>Партида</th>
+                        <th>Изтича на</th>
+                        <th>Дни до изтичане</th>
+                        <th>Налично</th>
+                        <th>За бракуване</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                </thead>
 
-    <div class="write-off-summary">
-        <div class="summary-info">
-            <span>Избрани: <strong>{{ selectedCount() }}</strong> партиди</span>
-
-            <span>Общо за бракуване: <strong>{{ totalWriteOff() }}</strong> бр.</span>
+                <tbody>
+                    @for (row of manualRows(); track row.batchId; let i = $index) {
+                        <tr [class.selected]="row.selected">
+                            <td class="checkbox-col">
+                                <input type="checkbox" [checked]="row.selected" (change)="toggleManualRow(i)">
+                            </td>
+                            <td>{{ row.batchNumber }}</td>
+                            <td>{{ row.expiryDate | date:'dd MMM yyyy' }}</td>
+                            <td class="days-until-expiry">{{ row.daysUntilExpiry }}д</td>
+                            <td class="number">{{ row.quantityRemaining }} {{ row.unit }}</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    class="qty-input"
+                                    [value]="row.writeOffQuantity"
+                                    (input)="onManualQuantityChange(i, $event)"
+                                    [min]="1"
+                                    [max]="row.quantityRemaining"
+                                    [disabled]="!row.selected">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
 
-        <button
-            class="btn btn-primary"
-            (click)="confirmWriteOff()"
-            [disabled]="isConfirming() || selectedCount() === 0">
-            {{ isConfirming() ? 'Обработка...' : 'Потвърди бракуване' }}
-        </button>
-    </div>
+        <div class="write-off-summary">
+            <div class="summary-info">
+                <span>Избрани: <strong>{{ manualSelectedCount() }}</strong> партиди</span>
 
-} @else {
-    <div class="empty-state">
-        <p>Няма изтекли партиди за бракуване.</p>
-    </div>
+                <span>Общо за бракуване: <strong>{{ manualTotalWriteOff() }}</strong> бр.</span>
+            </div>
+
+            <button
+                class="btn btn-primary"
+                (click)="confirmManualWriteOff()"
+                [disabled]="isConfirmingManual() || manualSelectedCount() === 0">
+                {{ isConfirmingManual() ? 'Обработка...' : 'Потвърди бракуване' }}
+            </button>
+        </div>
+
+    } @else if (selectedProductId() && manualRows().length === 0) {
+        <div class="empty-state">
+            <p>Няма активни партиди за този продукт.</p>
+        </div>
+    } @else {
+        <div class="empty-state">
+            <p>Изберете продукт, за да видите наличните партиди.</p>
+        </div>
+    }
+
 }

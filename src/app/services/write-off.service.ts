@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { ApiResponse, HttpService } from './http.service';
 
-import { ExpiredBatch, WriteOffItem } from './../models/write-off.model';
+import { ActiveBatch, ExpiredBatch, WriteOffItem } from './../models/write-off.model';
 
 import { environment } from './../environments/environment';
 
@@ -21,6 +21,12 @@ export class WriteOffService {
 
   public getExpired(): Observable<ApiResponse<ExpiredBatch[]>> {
     const url = this.apiUrl + 'write-offs/expired';
+
+    return this.httpService.get(url);
+  }
+
+  public getActiveBatches(productId: string): Observable<ApiResponse<ActiveBatch[]>> {
+    const url = this.apiUrl + 'write-offs/batches/' + productId;
 
     return this.httpService.get(url);
   }

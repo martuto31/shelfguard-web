@@ -1,5 +1,57 @@
 /* layout -> spacing -> sizing -> visual -> typography -> effects */
 
+/* Tabs */
+
+.tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    padding: 4px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    justify-content: center;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--font-medium-emphasis);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, font-weight 0.2s, box-shadow 0.2s;
+}
+
+.tab.active {
+    background: var(--bg-white);
+    color: var(--font-high-emphasis);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background: var(--status-critical-bg);
+    color: var(--status-critical-text);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* General */
+
 .loading {
     color: var(--font-medium-emphasis);
     font-size: 14px;
@@ -57,6 +109,11 @@ tr.selected {
 
 .days-expired {
     color: var(--status-critical-text);
+    font-weight: 600;
+}
+
+.days-until-expiry {
+    color: var(--font-medium-emphasis);
     font-weight: 600;
 }
 

@@ -1,5 +1,10 @@
 /* layout → spacing → sizing → visual → typography → effects */
 
+.header-actions {
+    display: flex;
+    gap: 8px;
+}
+
 .filter-row {
     padding: 16px 24px;
     margin-bottom: 16px;

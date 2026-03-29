@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 
 import { lastValueFrom } from 'rxjs';
 
+import { ExportService } from './../../services/export.service';
 import { ProductService } from './../../services/product.service';
 import { SnackbarService } from './../../services/snackbar.service';
 
@@ -30,6 +31,7 @@ export class ProductsComponent {
 
   constructor(
     private formBuilder: FormBuilder,
+    private exportService: ExportService,
     private productService: ProductService,
     private snackbarService: SnackbarService) {
 
@@ -134,6 +136,10 @@ export class ProductsComponent {
     } else {
       this.snackbarService.error('Неуспешно изтриване на продукт.');
     }
+  }
+
+  public exportCsv(): void {
+    this.exportService.downloadProductsCsv();
   }
 
   public hasError(controlName: string, errorName: string) {

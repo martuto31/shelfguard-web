@@ -1,5 +1,10 @@
 /* layout → spacing → sizing → visual → typography → effects */
 
+.export-actions {
+    display: flex;
+    gap: 8px;
+}
+
 .loading {
     color: var(--font-medium-emphasis);
     font-size: 14px;

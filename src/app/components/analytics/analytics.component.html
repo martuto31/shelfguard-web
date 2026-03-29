@@ -1,5 +1,12 @@
 <div class="page-header">
     <h2>Анализи</h2>
+
+    @if (summary()) {
+        <div class="export-actions">
+            <button class="btn btn-secondary small-btn" (click)="exportCsv()">Експорт CSV</button>
+            <button class="btn btn-primary small-btn" (click)="exportPdf()">Експорт PDF</button>
+        </div>
+    }
 </div>
 
 @if (isLoading()) {

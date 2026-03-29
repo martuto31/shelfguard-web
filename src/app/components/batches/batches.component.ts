@@ -5,6 +5,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { lastValueFrom } from 'rxjs';
 
 import { BatchService } from './../../services/batch.service';
+import { ExportService } from './../../services/export.service';
 import { ProductService } from './../../services/product.service';
 import { SnackbarService } from './../../services/snackbar.service';
 import { SupplierService } from './../../services/supplier.service';
@@ -36,6 +37,7 @@ export class BatchesComponent {
 
   constructor(
     private formBuilder: FormBuilder,
+    private exportService: ExportService,
     private productService: ProductService,
     private supplierService: SupplierService,
     private batchService: BatchService,
@@ -205,6 +207,10 @@ export class BatchesComponent {
     const expiry = new Date(batch.expiryDate);
 
     return Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  }
+
+  public exportCsv(): void {
+    this.exportService.downloadBatchesCsv();
   }
 
   public hasError(controlName: string, errorName: string) {

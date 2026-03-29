@@ -4,6 +4,7 @@ import { Component, signal } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 
 import { AnalyticsService } from './../../services/analytics.service';
+import { ExportService } from './../../services/export.service';
 import { SnackbarService } from './../../services/snackbar.service';
 
 import {
@@ -28,6 +29,7 @@ export class AnalyticsComponent {
 
   constructor(
     private analyticsService: AnalyticsService,
+    private exportService: ExportService,
     private snackbarService: SnackbarService) {
 
     this.load();
@@ -111,6 +113,14 @@ export class AnalyticsComponent {
     const [year, m] = month.split('-');
 
     return `${months[parseInt(m) - 1]} ${year}`;
+  }
+
+  public exportPdf(): void {
+    this.exportService.downloadAnalyticsPdf();
+  }
+
+  public exportCsv(): void {
+    this.exportService.downloadAnalyticsCsv();
   }
 
   public getTotalExpiryRiskCount(): number {

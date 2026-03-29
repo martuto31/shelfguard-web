@@ -1,7 +1,10 @@
 <div class="page-header">
     <h2>Партиди</h2>
 
-    <button class="btn btn-primary small-btn" (click)="openForm()">+ Приемане на стока</button>
+    <div class="header-actions">
+        <button class="btn btn-secondary small-btn" (click)="exportCsv()">Експорт CSV</button>
+        <button class="btn btn-primary small-btn" (click)="openForm()">+ Приемане на стока</button>
+    </div>
 </div>
 
 @if (showForm()) {

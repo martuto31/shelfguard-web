@@ -52,6 +52,13 @@ export const routes: Routes = [
     },
 
     {
+      path: 'movements',
+      loadComponent: () => import('./components/movements/movements.component').then(c => c.MovementsComponent),
+      title: 'Движения — ShelfGuard',
+      canActivate: [authGuard()],
+    },
+
+    {
       path: 'write-off',
       loadComponent: () => import('./components/write-off/write-off.component').then(c => c.WriteOffComponent),
       title: 'Бракуване — ShelfGuard',

@@ -1,0 +1,41 @@
+<div class="page-header">
+    <h2>Движения на склада</h2>
+</div>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Тип</th>
+                <th>Продукт</th>
+                <th>Партида</th>
+                <th>Количество</th>
+                <th>Причина</th>
+                <th>Извършил</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (m of movements(); track m.id) {
+                <tr>
+                    <td>{{ m.createdAt | date:'dd MMM yyyy, HH:mm' }}</td>
+                    <td>
+                        <span class="type-badge" [class]="getTypeClass(m.type)">
+                            {{ getTypeLabel(m.type) }}
+                        </span>
+                    </td>
+                    <td>{{ getProductName(m) }}</td>
+                    <td>{{ getBatchNumber(m) }}</td>
+                    <td>{{ m.quantity }}</td>
+                    <td>{{ m.reason || '—' }}</td>
+                    <td>{{ getPerformedBy(m) }}</td>
+                </tr>
+            } @empty {
+                <tr>
+                    <td colspan="7" class="empty">Няма записани движения.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

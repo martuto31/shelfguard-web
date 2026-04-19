@@ -83,15 +83,6 @@
         }
     </div>
 
-    @if (wasteByProduct().length > 0) {
-        <div class="analytics-section">
-            <h3>Загуби по продукти</h3>
-            <div class="chart-wrapper chart-waste">
-                <canvas #wasteChart></canvas>
-            </div>
-        </div>
-    }
-
     <!-- Stock by Product -->
     <div class="analytics-section">
         <h3>Наличност по продукти</h3>
@@ -142,10 +133,14 @@
         </div>
     </div>
 
-    <!-- Waste by Product (table) -->
-    @if (wasteByProduct().length > 0) {
+    <!-- Waste by Product -->
+    @if (wasteByProduct().some(i => i.totalWasted > 0)) {
         <div class="analytics-section">
             <h3>Загуби по продукти</h3>
+
+            <div class="chart-wrapper chart-waste" [style.height.px]="getWasteChartHeight()">
+                <canvas #wasteChart></canvas>
+            </div>
 
             <div class="table-container">
                 <table>

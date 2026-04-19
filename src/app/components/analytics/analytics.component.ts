@@ -260,6 +260,11 @@ export class AnalyticsComponent implements OnDestroy {
     this.exportService.downloadAnalyticsCsv();
   }
 
+  public getWasteChartHeight(): number {
+    const items = this.wasteByProduct().filter(i => i.totalWasted > 0).length;
+    return Math.max(160, items * 36);
+  }
+
   public getTotalExpiryRiskCount(): number {
     const risk = this.expiryRisk();
 

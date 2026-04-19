@@ -1,7 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild, signal } from '@angular/core';
 
 import { lastValueFrom } from 'rxjs';
+
+import { Chart, registerables } from 'chart.js';
 
 import { AnalyticsService } from './../../services/analytics.service';
 import { ExportService } from './../../services/export.service';
@@ -16,6 +18,8 @@ import {
     MonthlyMovement,
 } from './../../models/analytics.model';
 
+Chart.register(...registerables);
+
 @Component({
     selector: 'app-analytics',
     templateUrl: './analytics.component.html',
@@ -25,7 +29,15 @@ import {
     ]
 })
 
-export class AnalyticsComponent {
+export class AnalyticsComponent implements OnDestroy {
+
+  @ViewChild('monthlyChart') monthlyChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('riskChart') riskChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('wasteChart') wasteChartRef!: ElementRef<HTMLCanvasElement>;
+
+  private monthlyChartInstance: Chart | null = null;
+  private riskChartInstance: Chart | null = null;
+  private wasteChartInstance: Chart | null = null;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -55,11 +67,136 @@ export class AnalyticsComponent {
       this.wasteByProduct.set(response.data.wasteByProduct);
       this.supplierPerformance.set(response.data.supplierPerformance);
       this.movementsByMonth.set(response.data.movementsByMonth);
+
+      setTimeout(() => this.renderCharts(), 0);
     } else {
       this.snackbarService.error('Неуспешно зареждане на анализи.');
     }
 
     this.isLoading.set(false);
+  }
+
+  private renderCharts(): void {
+    this.renderMonthlyChart();
+    this.renderRiskChart();
+    this.renderWasteChart();
+  }
+
+  private renderMonthlyChart(): void {
+    if (!this.monthlyChartRef) return;
+
+    this.monthlyChartInstance?.destroy();
+
+    const months = this.movementsByMonth();
+
+    this.monthlyChartInstance = new Chart(this.monthlyChartRef.nativeElement, {
+      type: 'bar',
+      data: {
+        labels: months.map(m => this.formatMonth(m.month)),
+        datasets: [
+          {
+            label: 'Получено (IN)',
+            data: months.map(m => m.totalIn),
+            backgroundColor: '#22c55e',
+            borderRadius: 4,
+          },
+          {
+            label: 'Пикирано (OUT)',
+            data: months.map(m => m.totalOut),
+            backgroundColor: '#2563eb',
+            borderRadius: 4,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+        },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1 } },
+        },
+      },
+    });
+  }
+
+  private renderRiskChart(): void {
+    if (!this.riskChartRef) return;
+
+    this.riskChartInstance?.destroy();
+
+    const risk = this.expiryRisk();
+
+    if (!risk) return;
+
+    const levels = [
+      { label: 'Изтекли', value: risk.expired.count, color: '#ef4444' },
+      { label: 'Критични (≤7д)', value: risk.critical.count, color: '#f97316' },
+      { label: 'Внимание (≤30д)', value: risk.warning.count, color: '#f59e0b' },
+      { label: 'Наблюдение (≤90д)', value: risk.monitor.count, color: '#3b82f6' },
+      { label: 'Безопасни', value: risk.safe.count, color: '#22c55e' },
+    ].filter(l => l.value > 0);
+
+    this.riskChartInstance = new Chart(this.riskChartRef.nativeElement, {
+      type: 'doughnut',
+      data: {
+        labels: levels.map(l => l.label),
+        datasets: [{
+          data: levels.map(l => l.value),
+          backgroundColor: levels.map(l => l.color),
+          borderWidth: 2,
+          borderColor: '#ffffff',
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+        },
+      },
+    });
+  }
+
+  private renderWasteChart(): void {
+    if (!this.wasteChartRef) return;
+
+    this.wasteChartInstance?.destroy();
+
+    const items = this.wasteByProduct().filter(i => i.totalWasted > 0).slice(0, 10);
+
+    if (items.length === 0) return;
+
+    this.wasteChartInstance = new Chart(this.wasteChartRef.nativeElement, {
+      type: 'bar',
+      data: {
+        labels: items.map(i => i.productName),
+        datasets: [{
+          label: 'Загуби %',
+          data: items.map(i => i.wasteRate),
+          backgroundColor: items.map(i => i.wasteRate >= 10 ? '#ef4444' : i.wasteRate >= 5 ? '#f59e0b' : '#2563eb'),
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          x: { beginAtZero: true, max: 100, ticks: { callback: v => `${v}%` } },
+        },
+      },
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.monthlyChartInstance?.destroy();
+    this.riskChartInstance?.destroy();
+    this.wasteChartInstance?.destroy();
   }
 
   public getStockStatusClass(item: StockByProduct): string {

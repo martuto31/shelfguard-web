@@ -62,6 +62,36 @@
         </div>
     </div>
 
+    <!-- Charts Row -->
+    <div class="charts-grid">
+        @if (movementsByMonth().length > 0) {
+            <div class="chart-card">
+                <h3>Движения по месеци</h3>
+                <div class="chart-wrapper">
+                    <canvas #monthlyChart></canvas>
+                </div>
+            </div>
+        }
+
+        @if (expiryRisk() && getTotalExpiryRiskCount() > 0) {
+            <div class="chart-card">
+                <h3>Риск от изтичане</h3>
+                <div class="chart-wrapper">
+                    <canvas #riskChart></canvas>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (wasteByProduct().length > 0) {
+        <div class="analytics-section">
+            <h3>Загуби по продукти</h3>
+            <div class="chart-wrapper chart-waste">
+                <canvas #wasteChart></canvas>
+            </div>
+        </div>
+    }
+
     <!-- Stock by Product -->
     <div class="analytics-section">
         <h3>Наличност по продукти</h3>
@@ -112,66 +142,7 @@
         </div>
     </div>
 
-    <!-- Expiry Risk -->
-    @if (expiryRisk() && getTotalExpiryRiskCount() > 0) {
-        <div class="analytics-section">
-            <h3>Риск от изтичане</h3>
-
-            <div class="risk-grid">
-                @if (expiryRisk()!.expired.count > 0) {
-                    <div class="risk-card expired">
-                        <div class="risk-label">Изтекли</div>
-
-                        <div class="risk-count">{{ expiryRisk()!.expired.count }} партиди</div>
-
-                        <div class="risk-qty">{{ expiryRisk()!.expired.quantity }} бр.</div>
-                    </div>
-                }
-
-                @if (expiryRisk()!.critical.count > 0) {
-                    <div class="risk-card critical">
-                        <div class="risk-label">Критични (≤7 дни)</div>
-
-                        <div class="risk-count">{{ expiryRisk()!.critical.count }} партиди</div>
-
-                        <div class="risk-qty">{{ expiryRisk()!.critical.quantity }} бр.</div>
-                    </div>
-                }
-
-                @if (expiryRisk()!.warning.count > 0) {
-                    <div class="risk-card warning">
-                        <div class="risk-label">Внимание (≤30 дни)</div>
-
-                        <div class="risk-count">{{ expiryRisk()!.warning.count }} партиди</div>
-
-                        <div class="risk-qty">{{ expiryRisk()!.warning.quantity }} бр.</div>
-                    </div>
-                }
-
-                @if (expiryRisk()!.monitor.count > 0) {
-                    <div class="risk-card monitor">
-                        <div class="risk-label">Наблюдение (≤90 дни)</div>
-
-                        <div class="risk-count">{{ expiryRisk()!.monitor.count }} партиди</div>
-
-                        <div class="risk-qty">{{ expiryRisk()!.monitor.quantity }} бр.</div>
-                    </div>
-                }
-
-                @if (expiryRisk()!.safe.count > 0) {
-                    <div class="risk-card safe">
-                        <div class="risk-label">Безопасни (90+ дни)</div>
-
-                        <div class="risk-count">{{ expiryRisk()!.safe.count }} партиди</div>
-
-                        <div class="risk-qty">{{ expiryRisk()!.safe.quantity }} бр.</div>
-                    </div>
-                }
-            </div>
-        </div>
-    }
-
-    <!-- Waste by Product -->
+    <!-- Waste by Product (table) -->
     @if (wasteByProduct().length > 0) {
         <div class="analytics-section">
             <h3>Загуби по продукти</h3>
@@ -236,39 +207,6 @@
                                 </td>
                                 <td class="number" [class]="item.wastedQuantity > 0 ? 'waste-value' : ''">
                                     {{ item.wastedQuantity }}
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    }
-
-    <!-- Monthly Movements -->
-    @if (movementsByMonth().length > 0) {
-        <div class="analytics-section">
-            <h3>Движения по месеци</h3>
-
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Месец</th>
-                            <th>Получено (IN)</th>
-                            <th>Пикирано (OUT)</th>
-                            <th>Нетно</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @for (item of movementsByMonth(); track item.month) {
-                            <tr>
-                                <td>{{ formatMonth(item.month) }}</td>
-                                <td class="number in-value">+{{ item.totalIn }}</td>
-                                <td class="number out-value">-{{ item.totalOut }}</td>
-                                <td class="number" [class]="item.totalIn - item.totalOut >= 0 ? 'in-value' : 'out-value'">
-                                    {{ item.totalIn - item.totalOut >= 0 ? '+' : '' }}{{ item.totalIn - item.totalOut }}
                                 </td>
                             </tr>
                         }

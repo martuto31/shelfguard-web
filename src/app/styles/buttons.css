@@ -37,3 +37,9 @@
     background: none;
     border: 1px solid var(--cta-button);
 }
+
+.btn-danger {
+    color: var(--color-red);
+    background: none;
+    border: 1px solid var(--color-red);
+}

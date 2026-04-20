@@ -29,3 +29,13 @@ export interface DashboardData {
     lowStockAlerts: LowStockAlert[];
     expiringBatches: ExpiringBatch[];
 }
+
+export interface RecentActivity {
+    id: string;
+    type: 'IN' | 'OUT' | 'ADJUSTMENT';
+    productName: string;
+    batchNumber: string;
+    quantity: number;
+    performedBy: string;
+    createdAt: string;
+}

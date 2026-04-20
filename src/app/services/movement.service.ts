@@ -25,4 +25,10 @@ export class MovementService {
     return this.httpService.get(url);
   }
 
+  public getRecent(limit: number): Observable<ApiResponse<StockMovement[]>> {
+    const url = this.apiUrl + `movements?limit=${limit}`;
+
+    return this.httpService.get(url);
+  }
+
 }

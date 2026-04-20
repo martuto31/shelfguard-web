@@ -73,9 +73,56 @@
     margin-bottom: 32px;
 }
 
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.section-header .section-title {
+    margin-bottom: 0;
+}
+
+.see-all-link {
+    font-size: 13px;
+    color: var(--cta-button);
+    text-decoration: none;
+}
+
+.see-all-link:hover {
+    text-decoration: underline;
+}
+
 .section-title {
     margin-bottom: 16px;
     font-size: 18px;
+}
+
+/* Activity Feed */
+
+.type-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.type-badge.type-in {
+    background: var(--status-good-bg);
+    color: var(--status-good-text);
+}
+
+.type-badge.type-out {
+    background: var(--status-warning-bg);
+    color: var(--status-warning-text);
+}
+
+.type-badge.type-adjustment {
+    background: var(--status-muted-bg);
+    color: var(--status-muted-text);
 }
 
 .warning-title {

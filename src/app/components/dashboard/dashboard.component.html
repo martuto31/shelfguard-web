@@ -136,6 +136,49 @@
         </div>
     }
 
+    <!-- Recent Activity -->
+    @if (recentActivity().length > 0) {
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h3 class="section-title">Последна активност</h3>
+
+                <a routerLink="/movements" class="see-all-link">Виж всички →</a>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Тип</th>
+                            <th>Продукт</th>
+                            <th>Партида</th>
+                            <th>Количество</th>
+                            <th>От</th>
+                            <th>Дата</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (activity of recentActivity(); track activity.id) {
+                            <tr>
+                                <td>
+                                    <span class="type-badge" [class]="getTypeClass(activity.type)">
+                                        {{ getTypeLabel(activity.type) }}
+                                    </span>
+                                </td>
+                                <td>{{ activity.productName }}</td>
+                                <td>{{ activity.batchNumber }}</td>
+                                <td class="number">{{ activity.quantity }}</td>
+                                <td>{{ activity.performedBy }}</td>
+                                <td>{{ activity.createdAt | date:'dd MMM, HH:mm' }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
     <!-- Empty state if no alerts and no expiring -->
     @if (lowStockAlerts().length === 0 && groups().length === 0 && summary()!.expiredBatches === 0) {
         <div class="empty-state">

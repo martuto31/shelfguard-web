@@ -5,13 +5,16 @@ import { RouterLink } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 
 import { DashboardService } from './../../services/dashboard.service';
+import { MovementService } from './../../services/movement.service';
 import { SnackbarService } from './../../services/snackbar.service';
 
 import {
     DashboardSummary,
     LowStockAlert,
     ExpiringBatch,
+    RecentActivity,
 } from './../../models/dashboard.model';
+import { StockMovement } from './../../models/movement.model';
 
 interface ExpiryGroup {
   label: string;
@@ -33,6 +36,7 @@ export class DashboardComponent {
 
   constructor(
     private dashboardService: DashboardService,
+    private movementService: MovementService,
     private snackbarService: SnackbarService) {
 
     this.load();
@@ -42,21 +46,60 @@ export class DashboardComponent {
   public summary = signal<DashboardSummary | null>(null);
   public lowStockAlerts = signal<LowStockAlert[]>([]);
   public groups = signal<ExpiryGroup[]>([]);
+  public recentActivity = signal<RecentActivity[]>([]);
 
   public async load(): Promise<void> {
     this.isLoading.set(true);
 
-    const response = await lastValueFrom(this.dashboardService.get());
+    const [dashboardResponse, movementsResponse] = await Promise.all([
+      lastValueFrom(this.dashboardService.get()),
+      lastValueFrom(this.movementService.getRecent(5)),
+    ]);
 
-    if (response.status === 200 && response.data) {
-      this.summary.set(response.data.summary);
-      this.lowStockAlerts.set(response.data.lowStockAlerts);
-      this.groups.set(this.groupByExpiry(response.data.expiringBatches));
+    if (dashboardResponse.status === 200 && dashboardResponse.data) {
+      this.summary.set(dashboardResponse.data.summary);
+      this.lowStockAlerts.set(dashboardResponse.data.lowStockAlerts);
+      this.groups.set(this.groupByExpiry(dashboardResponse.data.expiringBatches));
     } else {
       this.snackbarService.error('Неуспешно зареждане на данни.');
     }
 
+    if (movementsResponse.status === 200 && movementsResponse.data) {
+      this.recentActivity.set(
+        movementsResponse.data.slice(0, 5).map(m => this.toRecentActivity(m))
+      );
+    }
+
     this.isLoading.set(false);
+  }
+
+  public getTypeClass(type: string): string {
+    if (type === 'IN') return 'type-in';
+    if (type === 'OUT') return 'type-out';
+
+    return 'type-adjustment';
+  }
+
+  public getTypeLabel(type: string): string {
+    const labels: Record<string, string> = {
+      IN: 'Приемане',
+      OUT: 'Пикиране',
+      ADJUSTMENT: 'Корекция',
+    };
+
+    return labels[type] ?? type;
+  }
+
+  private toRecentActivity(m: StockMovement): RecentActivity {
+    return {
+      id: m.id,
+      type: m.type,
+      productName: typeof m.productId === 'object' ? `${m.productId.name} (${m.productId.sku})` : m.productId,
+      batchNumber: typeof m.batchId === 'object' ? m.batchId.batchNumber : m.batchId,
+      quantity: m.quantity,
+      performedBy: typeof m.performedBy === 'object' ? m.performedBy.name : m.performedBy,
+      createdAt: m.createdAt,
+    };
   }
 
   public getDaysUntilExpiry(batch: ExpiringBatch): number {

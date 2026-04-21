@@ -1,44 +1,47 @@
 :root {
     /* Background Colors */
-    --bg-primary: #f8fafc;
-    --bg-secondary: #f1f5f9;
+    --bg-primary: #dde7ed;
+    --bg-secondary: #dee6eb;
     --bg-white: #ffffff;
-    --bg-gray: #f9fafb;
+    --bg-gray: #f4f8fa;
 
     /* Brand Colors */
-    --primary-brand: #2563eb;
-    --primary-brand-hover: #1d4ed8;
-    --secondary-brand: #004aad;
+    --primary-brand: #2e71af;
+    --primary-brand-hover: #235a8c;
+    --secondary-brand: #84a6c6;
 
     /* Button Colors */
-    --cta-button: #2563eb;
-    --cta-button-hover: #1d4ed8;
+    --cta-button: #2e71af;
+    --cta-button-hover: #235a8c;
 
     /* Text Colors */
     --font-white: #ffffff;
-    --font-high-emphasis: #1e293b;
-    --font-medium-emphasis: #64748b;
-    --font-low-emphasis: #94a3b8;
+    --font-high-emphasis: #1a2d42;
+    --font-medium-emphasis: #5a7a95;
+    --font-low-emphasis: #84a6c6;
 
     /* Border Colors */
-    --border-white: #e2e8f0;
-    --border-black: rgb(186, 194, 206);
+    --border-white: #c5cdd0;
+    --border-black: #84a6c6;
+
+    /* Accent */
+    --accent-warm: #ffbe82;
 
     /* Status Colors */
-    --color-red: #ef4444;
-    --color-yellow: #f59e0b;
-    --color-green: #22c55e;
+    --color-red: #d04545;
+    --color-yellow: #f0a040;
+    --color-green: #2d9e64;
 
     /* Status Badges */
-    --status-good-bg: #dcfce7;
-    --status-good-text: #166534;
-    --status-warning-bg: #fef3c7;
-    --status-warning-text: #92400e;
-    --status-critical-bg: #fee2e2;
-    --status-critical-text: #991b1b;
-    --status-muted-bg: #f3f4f6;
-    --status-muted-text: #6b7280;
+    --status-good-bg: #dff0e8;
+    --status-good-text: #1b5e3a;
+    --status-warning-bg: #fff0dd;
+    --status-warning-text: #7a4a00;
+    --status-critical-bg: #fce8e8;
+    --status-critical-text: #8b2020;
+    --status-muted-bg: #dee6eb;
+    --status-muted-text: #5a7a95;
 
     /* Error */
-    --error-color: #d32f2f;
+    --error-color: #c0392b;
 }

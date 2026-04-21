@@ -5,6 +5,7 @@
     background: var(--bg-white);
     border: 1px solid var(--border-white);
     border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 table {

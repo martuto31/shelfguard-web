@@ -3,19 +3,19 @@
     align-items: center;
     justify-content: space-between;
     padding: 16px 24px;
-    border-bottom: 1px solid var(--border-white);
-    background-color: var(--bg-white);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background-color: #1a2d42;
 }
 
 .logo {
     font-size: 20px;
     font-weight: 700;
-    color: var(--font-high-emphasis);
+    color: #ffffff;
     text-decoration: none;
 }
 
 .logo-accent {
-    color: var(--primary-brand);
+    color: #ffbe82;
 }
 
 .nav-links {
@@ -26,11 +26,23 @@
 .nav-links a {
     font-size: 14px;
     font-weight: 500;
-    color: var(--font-medium-emphasis);
+    color: rgba(255, 255, 255, 0.55);
     transition: color 0.2s;
 }
 
 .nav-links a:hover,
 .nav-links a.active {
-    color: var(--primary-brand);
+    color: #ffffff;
+}
+
+.navbar .btn-secondary {
+    color: rgba(255, 255, 255, 0.75);
+    border-color: rgba(255, 255, 255, 0.22);
+    background: none;
+}
+
+.navbar .btn-secondary:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.5);
+    opacity: 1;
 }

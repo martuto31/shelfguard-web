@@ -97,13 +97,13 @@ export class AnalyticsComponent implements OnDestroy {
           {
             label: 'Получено (IN)',
             data: months.map(m => m.totalIn),
-            backgroundColor: '#22c55e',
+            backgroundColor: '#2d9e64',
             borderRadius: 4,
           },
           {
             label: 'Пикирано (OUT)',
             data: months.map(m => m.totalOut),
-            backgroundColor: '#2563eb',
+            backgroundColor: '#2e71af',
             borderRadius: 4,
           },
         ],
@@ -131,11 +131,11 @@ export class AnalyticsComponent implements OnDestroy {
     if (!risk) return;
 
     const levels = [
-      { label: 'Изтекли', value: risk.expired.count, color: '#ef4444' },
-      { label: 'Критични (≤7д)', value: risk.critical.count, color: '#f97316' },
-      { label: 'Внимание (≤30д)', value: risk.warning.count, color: '#f59e0b' },
-      { label: 'Наблюдение (≤90д)', value: risk.monitor.count, color: '#3b82f6' },
-      { label: 'Безопасни', value: risk.safe.count, color: '#22c55e' },
+      { label: 'Изтекли', value: risk.expired.count, color: '#d04545' },
+      { label: 'Критични (≤7д)', value: risk.critical.count, color: '#e07030' },
+      { label: 'Внимание (≤30д)', value: risk.warning.count, color: '#f0a040' },
+      { label: 'Наблюдение (≤90д)', value: risk.monitor.count, color: '#84a6c6' },
+      { label: 'Безопасни', value: risk.safe.count, color: '#2d9e64' },
     ].filter(l => l.value > 0);
 
     this.riskChartInstance = new Chart(this.riskChartRef.nativeElement, {
@@ -175,7 +175,7 @@ export class AnalyticsComponent implements OnDestroy {
         datasets: [{
           label: 'Загуби %',
           data: items.map(i => i.wasteRate),
-          backgroundColor: items.map(i => i.wasteRate >= 10 ? '#ef4444' : i.wasteRate >= 5 ? '#f59e0b' : '#2563eb'),
+          backgroundColor: items.map(i => i.wasteRate >= 10 ? '#d04545' : i.wasteRate >= 5 ? '#f0a040' : '#2e71af'),
           borderRadius: 4,
         }],
       },

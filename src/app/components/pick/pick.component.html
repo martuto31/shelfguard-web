@@ -1,4 +1,4 @@
-<h2>FEFO Пикиране</h2>
+<h2>Извеждане на стока по FEFO</h2>
 
 <div class="pick-form">
     <div class="form-row">
@@ -21,7 +21,7 @@
 
         <div class="form-field btn-field">
             <button class="btn btn-primary" (click)="suggest()" [disabled]="isLoading()">
-                {{ isLoading() ? 'Зареждане...' : 'Предложи пикиране' }}
+                {{ isLoading() ? 'Зареждане...' : 'Предложи извеждане' }}
             </button>
         </div>
     </div>
@@ -29,7 +29,7 @@
 
 @if (showSuggestions()) {
     <div class="suggestions-card">
-        <h3>Предложение за пикиране на {{ getProductName() }}</h3>
+        <h3>Предложение за извеждане на {{ getProductName() }}</h3>
 
         @if (expiredCount() > 0) {
             <div class="warning expired-warning">
@@ -49,7 +49,7 @@
                     <th>Партида</th>
                     <th>Срок на годност</th>
                     <th>Оставащи дни</th>
-                    <th>Кол. за пикиране</th>
+                    <th>Кол. за извеждане</th>
                     <th>Остатък след</th>
                 </tr>
             </thead>
@@ -71,7 +71,7 @@
             <button class="btn btn-secondary" (click)="reset()">Отказ</button>
 
             <button class="btn btn-primary" (click)="confirmPick()" [disabled]="isLoading()">
-                {{ isLoading() ? 'Потвърждаване...' : 'Потвърди пикиране' }}
+                {{ isLoading() ? 'Потвърждаване...' : 'Потвърди извеждане' }}
             </button>
         </div>
     </div>

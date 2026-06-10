@@ -72,7 +72,7 @@ export class MovementsComponent {
   public getTypeLabel(type: string): string {
     const labels: Record<string, string> = {
       IN: 'Приемане',
-      OUT: 'Пикиране',
+      OUT: 'Извеждане',
       ADJUSTMENT: 'Корекция',
     };
 

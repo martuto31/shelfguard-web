@@ -91,13 +91,13 @@ export class PickComponent {
     const response = await lastValueFrom(this.pickService.confirm(this.selectedProductId(), this.suggestions()));
 
     if (response.status === 200) {
-      this.snackbarService.success('Пикирането е потвърдено. Наличността е обновена.');
+      this.snackbarService.success('Извеждането е потвърдено. Наличността е обновена.');
       this.reset();
     } else if (response.status === 409) {
       this.snackbarService.error('Наличността се е променила. Опитайте отново.');
       this.showSuggestions.set(false);
     } else {
-      this.snackbarService.error('Неуспешно потвърждаване на пикиране.');
+      this.snackbarService.error('Неуспешно потвърждаване на извеждане.');
     }
 
     this.isLoading.set(false);

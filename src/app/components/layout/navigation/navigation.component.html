@@ -7,7 +7,7 @@
             <a routerLink="/products" routerLinkActive="active">Продукти</a>
             <a routerLink="/suppliers" routerLinkActive="active">Доставчици</a>
             <a routerLink="/batches" routerLinkActive="active">Партиди</a>
-            <a routerLink="/pick" routerLinkActive="active">Пикиране</a>
+            <a routerLink="/pick" routerLinkActive="active">Извеждане</a>
             <a routerLink="/movements" routerLinkActive="active">Движения</a>
 
             @if (userService.user()!.role === Role.OWNER || userService.user()!.role === Role.MANAGER) {

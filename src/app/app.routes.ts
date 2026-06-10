@@ -47,7 +47,7 @@ export const routes: Routes = [
     {
       path: 'pick',
       loadComponent: () => import('./components/pick/pick.component').then(c => c.PickComponent),
-      title: 'Пикиране — ShelfGuard',
+      title: 'Извеждане на стока — ShelfGuard',
       canActivate: [authGuard()],
     },
 

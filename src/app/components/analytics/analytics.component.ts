@@ -101,7 +101,7 @@ export class AnalyticsComponent implements OnDestroy {
             borderRadius: 4,
           },
           {
-            label: 'Пикирано (OUT)',
+            label: 'Изведено (OUT)',
             data: months.map(m => m.totalOut),
             backgroundColor: '#2e71af',
             borderRadius: 4,

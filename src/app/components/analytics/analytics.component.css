@@ -51,49 +51,7 @@
 
 /* KPI Grid */
 
-.kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-    gap: 16px;
-    margin-bottom: 32px;
-}
-
-.kpi-card {
-    padding: 20px;
-    background: var(--bg-white);
-    border: 1px solid var(--border-white);
-    border-radius: 12px;
-}
-
-.kpi-label {
-    margin-bottom: 4px;
-    font-size: 13px;
-    color: var(--font-medium-emphasis);
-}
-
-.kpi-value {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--font-high-emphasis);
-}
-
-.kpi-value.critical {
-    color: var(--status-critical-text);
-}
-
-.kpi-value.warning {
-    color: var(--status-warning-text);
-}
-
-.kpi-sub {
-    margin-top: 2px;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.kpi-sub.critical {
-    color: var(--status-critical-text);
-}
+/* KPI card styles are shared in src/app/styles/kpi.css */
 
 /* Analytics Sections */
 

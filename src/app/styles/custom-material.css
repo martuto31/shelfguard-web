@@ -1,3 +1,14 @@
+.mdc-snackbar__label,
+.mat-mdc-snack-bar-action {
+    font-family: "Inter", system-ui, sans-serif !important;
+}
+
+.snackbar-success .mdc-snackbar__surface,
+.snackbar-error .mdc-snackbar__surface {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18) !important;
+}
+
 .snackbar-success .mdc-snackbar__surface {
     background-color: var(--color-green) !important;
 }

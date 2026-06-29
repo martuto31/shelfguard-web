@@ -27,12 +27,18 @@
     font-size: 14px;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.55);
-    transition: color 0.2s;
+    padding-bottom: 3px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
 }
 
 .nav-links a:hover,
 .nav-links a.active {
     color: #ffffff;
+}
+
+.nav-links a.active {
+    border-bottom-color: #ffbe82;
 }
 
 .navbar .btn-secondary {

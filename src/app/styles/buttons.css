@@ -14,8 +14,14 @@
     padding: 8px 16px;
 }
 
-.btn:hover {
-    opacity: 0.8;
+.btn,
+.small-btn {
+    white-space: nowrap;
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
 .btn-primary {
@@ -26,6 +32,7 @@
 
 .btn-primary:hover {
     background-color: var(--cta-button-hover);
+    box-shadow: 0 3px 10px rgba(46, 113, 175, 0.3);
 }
 
 .btn-primary:disabled {
@@ -39,8 +46,16 @@
     border: 1px solid var(--cta-button);
 }
 
+.btn-secondary:hover {
+    background: rgba(46, 113, 175, 0.08);
+}
+
 .btn-danger {
     color: var(--color-red);
     background: none;
     border: 1px solid var(--color-red);
+}
+
+.btn-danger:hover {
+    background: rgba(208, 69, 69, 0.08);
 }

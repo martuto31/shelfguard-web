@@ -75,7 +75,7 @@ export class PickComponent {
       this.expiredCount.set(response.data.expiredCount);
       this.showSuggestions.set(true);
     } else if (response.status === 404) {
-      this.snackbarService.error('Няма налична наличност за този продукт.');
+      this.snackbarService.error('Няма наличност за този продукт.');
       this.suggestions.set([]);
       this.showSuggestions.set(false);
     } else {

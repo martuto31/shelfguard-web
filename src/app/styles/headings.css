@@ -2,49 +2,47 @@ h1,
 h2,
 h3 {
     font-weight: 600;
-    line-height: initial;
+    line-height: 1.25;
     margin: 0;
+    color: var(--font-high-emphasis);
 }
 
 h1 {
-    font-size: 48px;
-    color: var(--font-high-emphasis);
-    margin-bottom: 32px;
+    font-size: 36px;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
 }
 
 .tablet h1 {
-    font-size: 42px;
-    margin-bottom: 24px;
-}
-
-.mobile h1 {
-    font-size: 38px;
-    margin-bottom: 24px;
-}
-
-h2 {
-    font-size: 38px;
-    color: var(--font-high-emphasis);
-    margin-bottom: 24px;
-}
-
-.tablet h2 {
     font-size: 32px;
 }
 
-.mobile h2 {
+.mobile h1 {
     font-size: 28px;
 }
 
+h2 {
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+}
+
+.tablet h2 {
+    font-size: 24px;
+}
+
+.mobile h2 {
+    font-size: 22px;
+}
+
 h3 {
-    font-size: 26px;
-    color: var(--font-high-emphasis);
+    font-size: 20px;
 }
 
 .tablet h3 {
-    font-size: 22px;
+    font-size: 18px;
 }
 
 .mobile h3 {
-    font-size: 22px;
+    font-size: 18px;
 }

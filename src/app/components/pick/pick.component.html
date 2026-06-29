@@ -1,4 +1,4 @@
-<h2>Извеждане на стока по FEFO</h2>
+<h2>Събиране на стока по FEFO</h2>
 
 <div class="pick-form">
     <div class="form-row">
@@ -21,7 +21,7 @@
 
         <div class="form-field btn-field">
             <button class="btn btn-primary" (click)="suggest()" [disabled]="isLoading()">
-                {{ isLoading() ? 'Зареждане...' : 'Предложи извеждане' }}
+                {{ isLoading() ? 'Зареждане...' : 'Предложи разпределение' }}
             </button>
         </div>
     </div>
@@ -29,7 +29,7 @@
 
 @if (showSuggestions()) {
     <div class="suggestions-card">
-        <h3>Предложение за извеждане на {{ getProductName() }}</h3>
+        <h3>Предложение за разпределение — {{ getProductName() }}</h3>
 
         @if (expiredCount() > 0) {
             <div class="warning expired-warning">
